@@ -1,0 +1,107 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Organization {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+
+    users User[]
+    areas Area[]
+}
+
+model User {
+    id    Int    @id @default(autoincrement())
+    email String @unique
+    name  String
+    role  Role
+
+    organization Organization @relation(fields: [organizationId], references: [id])
+    inspections  Inspection[]
+
+    organizationId Int
+}
+
+model Area {
+    id   Int    @id @default(autoincrement())
+    name String
+
+    organization Organization @relation(fields: [organizationId], references: [id])
+    inspections  Inspection[]
+
+    organizationId Int
+
+    // area name is unique in the scope of the organization it belongs to
+    @@unique([organizationId, name])
+}
+
+model Inspection {
+    id        Int      @id @default(autoincrement())
+    area      Area     @relation(fields: [areaId], references: [id])
+    inspector User     @relation(fields: [userId], references: [id])
+    type      Type
+    date      DateTime
+
+    observations Observation[]
+
+    areaId Int
+    userId Int
+}
+
+model Observation {
+    id    Int   @id @default(autoincrement())
+    state State
+
+    inspection Inspection @relation(fields: [inspectionId], references: [id])
+    condition  Condition  @relation(fields: [conditionId], references: [id])
+    evidences  Evidence[]
+
+    inspectionId Int
+    conditionId  Int
+}
+
+model Category {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+
+    conditions Condition[]
+}
+
+model Condition {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+
+    observations Observation[]
+    categories Category[]
+
+}
+
+model Evidence {
+    id  Int    @id @default(autoincrement())
+    url String
+
+    observation   Observation @relation(fields: [observationId], references: [id])
+    observationId Int
+}
+
+enum Role {
+    MANAGER
+    EMPLOYEE
+}
+
+enum Type {
+    ANNOUNCED
+    UNANNOUNCED
+}
+
+enum State {
+    ACCEPTABLE
+    UNSAFE
+    MISSING
+    NEEDS_REPAIR
+}
