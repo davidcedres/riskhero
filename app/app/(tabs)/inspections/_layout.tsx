@@ -15,7 +15,7 @@ const Layout = () => {
                 options={{
                     // headerShown: false,
                     title: '',
-                    presentation: 'modal',
+                    // presentation: 'modal',
                 }}
             />
         </Stack>

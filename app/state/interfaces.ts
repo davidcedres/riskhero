@@ -17,6 +17,7 @@ export interface Inspection {
     type: 'ANNOUNCED' | 'UNANNOUNCED'
     date: Date
     observations: number[]
+    status: 'OPEN' | 'CLOSED' | 'FINALIZED'
 }
 
 export interface Category {
@@ -41,18 +42,26 @@ export interface Observation {
     categoryId: string
     conditionId: string
     state: State
+    description: string
 }
 
 export interface Evidence {
     id: string
     data: string
+    observationId: string
+}
+
+export interface Report {
+    id: string
+    inspectionId: string
+    status: 'OPEN' | 'CLOSED' | 'ARCHIVED'
 }
 
 export enum State {
-    ACCEPTABLE, // thumbs-up
-    UNSAFE, // alert-triangle
-    MISSING, // help-circle
-    NEEDS_REPAIR, // tool
+    ACCEPTABLE,
+    UNSAFE,
+    MISSING,
+    NEEDS_REPAIR,
 }
 
 export const getStateLabel = (state: State) => {

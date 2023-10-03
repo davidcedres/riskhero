@@ -65,6 +65,7 @@ interface Actions {
     setLogged: (logged: boolean) => void
     createArea: (area: Omit<Area, 'id'>) => void
     createInspection: (inspection: Omit<Inspection, 'id'>) => void
+    closeInspection: (inspectionId: string) => void
     createObservation: (observation: Omit<Observation, 'id'>) => void
     createEvidence: (evidence: Omit<Evidence, 'id'>) => void
 }
@@ -107,6 +108,11 @@ export const useStore = create(
                 const id = nanoid()
                 state.inspections.index[id] = merge(inspection, { id })
                 state.inspections.ids.push(id)
+            }),
+
+        closeInspection: (id) =>
+            set((state) => {
+                state.inspections.index[id].status = 'CLOSED'
             }),
 
         categories: {

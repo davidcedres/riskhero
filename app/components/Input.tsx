@@ -1,10 +1,10 @@
 import { FC } from 'react'
-import { Control, FieldValues, useController } from 'react-hook-form'
+import { Control, useController } from 'react-hook-form'
 import { StyleSheet, TextInput, TextInputProps } from 'react-native'
 
 const Input: FC<
     TextInputProps & { control?: Control<any, any>; name: string }
-> = ({ control, name, ...rest }) => {
+> = ({ control, name, style, ...rest }) => {
     const { field } = useController({
         control,
         name,
@@ -12,7 +12,7 @@ const Input: FC<
 
     return (
         <TextInput
-            style={styles.root}
+            style={StyleSheet.compose(styles.root, style)}
             placeholderTextColor="#96939B"
             {...rest}
             value={field.value}

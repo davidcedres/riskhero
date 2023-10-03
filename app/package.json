@@ -35,7 +35,9 @@
     "react-native-screens": "~3.22.0",
     "react-native-web": "~0.19.6",
     "zod": "^3.22.2",
-    "zustand": "^4.4.1"
+    "zustand": "^4.4.1",
+    "expo-camera": "~13.4.4",
+    "react-native-reanimated": "~3.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

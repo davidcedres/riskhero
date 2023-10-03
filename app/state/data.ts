@@ -27,6 +27,7 @@ const makeInspection = (areaIndex: number, userIndex: number): Inspection => ({
     type: 'ANNOUNCED',
     date: new Date(),
     observations: [],
+    status: 'OPEN',
 })
 
 // MOCKED DATE FOR APP DEMO

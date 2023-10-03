@@ -46,7 +46,9 @@ const Signin = () => {
                     name="password"
                     control={control}
                 />
-                <Button onPress={handleSubmit(handleLogin)}>Entrar</Button>
+                <Button onPress={handleSubmit(handleLogin, handleLogin)}>
+                    Entrar
+                </Button>
             </VStack>
         </View>
     )

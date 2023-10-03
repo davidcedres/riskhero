@@ -35,6 +35,7 @@ const New = () => {
             type,
             date,
             observations: [],
+            status: 'OPEN',
         })
         router.back()
         toast('Guardado', {
