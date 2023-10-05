@@ -46,6 +46,7 @@ model Inspection {
     inspector User     @relation(fields: [userId], references: [id])
     type      Type
     date      DateTime
+    status    Status
 
     observations Observation[]
 
@@ -78,7 +79,6 @@ model Condition {
 
     observations Observation[]
     categories Category[]
-
 }
 
 model Evidence {
@@ -97,6 +97,12 @@ enum Role {
 enum Type {
     ANNOUNCED
     UNANNOUNCED
+}
+
+enum Status {
+    OPEN
+    CLOSED
+    DONE
 }
 
 enum State {

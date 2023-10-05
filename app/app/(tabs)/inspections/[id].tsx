@@ -49,7 +49,7 @@ const Inspection = () => {
         <ScrollView style={{ backgroundColor: 'white' }}>
             <VStack style={{ padding: 16 }}>
                 <VStack style={{ marginBottom: 16 }}>
-                    <Typography variant="title">Inspeccion</Typography>
+                    <Typography variant="title">Inspección</Typography>
                     <Typography variant="body">{area.name}</Typography>
                     <Typography variant="body">{inspector.name}</Typography>
                 </VStack>

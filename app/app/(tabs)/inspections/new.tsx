@@ -46,7 +46,7 @@ const New = () => {
     return (
         <ScrollView style={{ backgroundColor: 'white' }}>
             <VStack style={{ padding: 32 }}>
-                <Typography variant="title">Nueva Inspeccion</Typography>
+                <Typography variant="title">Nueva Inspección</Typography>
 
                 <VStack style={{ gap: 0 }}>
                     <Typography variant="body">Area a inspeccionar</Typography>
@@ -102,7 +102,7 @@ const New = () => {
                 </VStack>
 
                 <VStack style={{ gap: 0 }}>
-                    <Typography variant="body">Tipo de Inspeccion</Typography>
+                    <Typography variant="body">Tipo de Inspección</Typography>
 
                     <Picker
                         style={{ top: -18 }}
