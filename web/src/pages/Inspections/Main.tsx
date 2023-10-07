@@ -52,12 +52,7 @@ const Inspections = () => {
         <Stack>
             <Flex justify="space-between">
                 <Title>Inspecciones</Title>
-                <Button
-                    component={Link}
-                    to="new"
-                    color="black"
-                    variant="gradient"
-                >
+                <Button component={Link} to="new" variant="gradient">
                     Nueva
                 </Button>
             </Flex>
