@@ -1,0 +1,26 @@
+# global options
+{ 
+    admin off # theres no need for the admin api in railway's environment
+    persist_config off # storage isn't persistent anyway
+    auto_https off # railway handles https for us, this would cause issues if left enabled
+
+    # runtime logs
+    log { 
+        format console # set runtime log format to console mode 
+    }
+
+    # server options
+    servers { 
+        trusted_proxies static private_ranges # trust railway's proxy
+    }
+}
+
+# site block, listens on the $PORT environment variable, automatically assigned by railway
+:{$PORT} { 
+    log { 
+        # access logs
+        format console # set access log format to console mode
+    }
+
+    reverse_proxy {$CONSOLE_MINIO_SERVER} # configure this variable in the service settings
+}
