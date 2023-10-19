@@ -16,15 +16,19 @@ model Organization {
 }
 
 model User {
-    id    Int    @id @default(autoincrement())
-    email String @unique
-    name  String
-    role  Role
+    id Int @id @default(autoincrement())
+
+    email    String @unique
+    password String
+
+    name String
+    role Role
 
     organization Organization @relation(fields: [organizationId], references: [id])
     inspections  Inspection[]
 
     organizationId Int
+    updatedAt      DateTime
 }
 
 model Area {
@@ -35,6 +39,7 @@ model Area {
     inspections  Inspection[]
 
     organizationId Int
+    updatedAt      DateTime
 
     // area name is unique in the scope of the organization it belongs to
     @@unique([organizationId, name])
@@ -52,6 +57,8 @@ model Inspection {
 
     areaId Int
     userId Int
+
+    updatedAt DateTime
 }
 
 model Observation {
@@ -60,17 +67,24 @@ model Observation {
 
     inspection Inspection @relation(fields: [inspectionId], references: [id])
     condition  Condition  @relation(fields: [conditionId], references: [id])
-    evidences  Evidence[]
+    category   Category   @relation(fields: [categoryId], references: [id])
+
+    evidences   Evidence[]
+    description String
 
     inspectionId Int
     conditionId  Int
+    categoryId   Int
+    updatedAt    DateTime
 }
 
 model Category {
     id   Int    @id @default(autoincrement())
     name String @unique
 
-    conditions Condition[]
+    conditions  Condition[]
+    updatedAt   DateTime
+    Observation Observation[]
 }
 
 model Condition {
@@ -78,15 +92,17 @@ model Condition {
     name String @unique
 
     observations Observation[]
-    categories Category[]
+    categories   Category[]
+    updatedAt    DateTime
 }
 
 model Evidence {
     id  Int    @id @default(autoincrement())
-    url String
+    key String
 
     observation   Observation @relation(fields: [observationId], references: [id])
     observationId Int
+    updatedAt     DateTime
 }
 
 enum Role {
@@ -110,4 +126,5 @@ enum State {
     UNSAFE
     MISSING
     NEEDS_REPAIR
+    SKIPPED
 }

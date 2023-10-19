@@ -1,14 +1,19 @@
-import { StyleSheet } from 'react-native'
-import VStack from './VStack'
-import { FC } from 'react'
-import Feather from '@expo/vector-icons/Feather'
-import Typography from './Typography'
+import { StyleSheet } from "react-native";
+import VStack from "./VStack";
+import { FC } from "react";
+import Feather from "@expo/vector-icons/Feather";
+import Typography from "./Typography";
 
 const StateCard: FC<{
-    highlited: boolean
-    icon: 'thumbs-up' | 'alert-triangle' | 'help-circle' | 'tool'
-    label: string
-    color: string
+    highlited: boolean;
+    icon:
+        | "thumbs-up"
+        | "alert-triangle"
+        | "help-circle"
+        | "tool"
+        | "more-horizontal";
+    label: string;
+    color: string;
 }> = ({ highlited, icon, label, color }) => {
     return (
         <VStack
@@ -16,7 +21,7 @@ const StateCard: FC<{
                 styles.card,
                 highlited
                     ? {
-                          backgroundColor: '#F1F5F9',
+                          backgroundColor: "#F1F5F9",
                       }
                     : {}
             )}
@@ -24,8 +29,8 @@ const StateCard: FC<{
             <Feather size={64} name={icon} color={color} />
             <Typography variant="body">{label}</Typography>
         </VStack>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     card: {
@@ -33,6 +38,6 @@ const styles = StyleSheet.create({
         paddingVertical: 32,
         borderRadius: 8,
     },
-})
+});
 
-export default StateCard
+export default StateCard;

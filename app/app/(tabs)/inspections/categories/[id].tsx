@@ -1,62 +1,79 @@
-import { Link, useLocalSearchParams } from 'expo-router'
-import Typography from '../../../../components/Typography'
-import VStack from '../../../../components/VStack'
-import { useStore } from '../../../../state/store'
-import ConditionCard from '../../../../components/ConditionCard'
-import { useMemo } from 'react'
-import { ScrollView, TouchableOpacity } from 'react-native'
-import { keyBy, values } from 'lodash'
+import { every, keyBy, values } from "lodash";
+import { Link, router, useLocalSearchParams } from "expo-router";
+import { ScrollView, TouchableOpacity } from "react-native";
+import { State } from "../../../../state/interfaces";
+import { useMemo } from "react";
+import { useStore } from "../../../../state/store";
+import Button from "../../../../components/Button";
+import ConditionCard from "../../../../components/ConditionCard";
+import Typography from "../../../../components/Typography";
+import VStack from "../../../../components/VStack";
 
 const Category = () => {
-    const { id, inspectionId } = useLocalSearchParams()
-    if (typeof id !== 'string' || typeof inspectionId !== 'string')
-        throw new Error('BOOM')
+    const { id, inspectionId } = useLocalSearchParams();
+    if (typeof id !== "string" || typeof inspectionId !== "string")
+        throw new Error("BOOM");
 
-    const category = useStore((store) => store.categories.index[id])
-    const categoryConditions = useStore((store) => store.categoryConditions)
-    const conditions = useStore((store) => store.conditions)
-    const observations = useStore((store) => store.observations)
+    const category = useStore((store) => store.categories.index[id]);
+    const observations = useStore((store) => store.observations);
+    const createSimpleObservation = useStore(
+        (store) => store.createSimpleObservation
+    );
 
-    const conditionIds = categoryConditions.ids
-        .map((id) => categoryConditions.index[id])
-        .filter((categoryCondition) => categoryCondition.categoryId === id)
-        .map((categoryCondition) => categoryCondition.conditionId)
-
-    const conditionsForCategory = useMemo(
-        () => conditionIds.map((id) => conditions.index[id]),
-        [conditionIds, conditions]
-    )
-
-    const observationsForThisInspectionAndCategory = useMemo(
+    const observationsAlreadyMade = useMemo(
         () =>
-            keyBy(
-                values(observations.index).filter(
-                    (observation) =>
-                        observation.inspectionId === inspectionId &&
-                        observation.categoryId === id
-                ),
-                'conditionId'
+            values(observations.index).filter(
+                (observation) =>
+                    observation.inspectionId === Number(inspectionId) &&
+                    observation.categoryId === Number(id)
             ),
+        [observations.index]
+    );
+
+    const observationsPerCondition = useMemo(
+        () => keyBy(observationsAlreadyMade, "conditionId"),
         [observations, inspectionId, id]
-    )
+    );
+
+    const omitCategory = () => {
+        category.conditions.forEach((condition) => {
+            createSimpleObservation({
+                inspectionId: Number(inspectionId),
+                categoryId: Number(id),
+                conditionId: condition.id,
+                state: State.SKIPPED,
+                description: "No Aplica",
+            });
+        });
+
+        router.back();
+    };
+
+    const userSkippedEveryPossibleCondition =
+        observationsAlreadyMade.length === category.conditions.length &&
+        every(
+            observationsPerCondition,
+            (observation) => observation.state === State.SKIPPED
+        );
 
     return (
-        <ScrollView style={{ backgroundColor: 'white' }}>
+        <ScrollView style={{ backgroundColor: "white" }}>
             <VStack style={{ padding: 16 }}>
                 <Typography variant="title">{category.name}</Typography>
 
                 <Typography variant="section">Condiciones</Typography>
 
-                {conditionsForCategory.map((condition) => (
+                {category.conditions.map((condition) => (
                     <Link
                         key={condition.id}
                         href={{
                             pathname:
-                                '/inspections/categories/observations/new',
+                                "/inspections/categories/observations/new",
                             params: {
                                 inspectionId,
                                 categoryId: id,
                                 conditionId: condition.id,
+                                conditionName: condition.name,
                             },
                         }}
                         asChild
@@ -66,17 +83,25 @@ const Category = () => {
                                 key={condition.id}
                                 condition={condition}
                                 state={
-                                    observationsForThisInspectionAndCategory[
-                                        condition.id
-                                    ]?.state
+                                    observationsPerCondition[condition.id]
+                                        ?.state
                                 }
                             />
                         </TouchableOpacity>
                     </Link>
                 ))}
+
+                {userSkippedEveryPossibleCondition === false && (
+                    <Button
+                        onPress={omitCategory}
+                        style={{ backgroundColor: "#ef4444" }}
+                    >
+                        Omitir
+                    </Button>
+                )}
             </VStack>
         </ScrollView>
-    )
-}
+    );
+};
 
-export default Category
+export default Category;

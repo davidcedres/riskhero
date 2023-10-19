@@ -1,7 +1,6 @@
-import { Tabs } from 'expo-router'
-
-import Feather from '@expo/vector-icons/Feather'
-import { Platform } from 'react-native'
+import { Platform } from "react-native";
+import { Tabs } from "expo-router";
+import Feather from "@expo/vector-icons/Feather";
 
 export default () => {
     return (
@@ -9,54 +8,36 @@ export default () => {
             screenOptions={{
                 headerShown: true,
                 tabBarStyle: {
-                    ...(Platform.OS === 'ios' && {
+                    ...(Platform.OS === "ios" && {
                         height: 96,
                         paddingBottom: 32,
                     }),
-                    ...(Platform.OS === 'android' && {
+                    ...(Platform.OS === "android" && {
                         height: 64,
                         paddingBottom: 8,
                     }),
                 },
-                tabBarActiveTintColor: '#1e293b',
+                tabBarActiveTintColor: "#1e293b",
             }}
         >
             <Tabs.Screen
                 name="inspections"
                 options={{
-                    title: 'Inspecciones',
+                    title: "Inspecciones",
                     tabBarIcon: ({ color }) => (
-                        <Feather size={28} name="home" color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="reports"
-                options={{
-                    title: 'Reportes',
-                    tabBarIcon: ({ color }) => (
-                        <Feather size={28} name="file" color={color} />
-                    ),
-                }}
-            />
-            <Tabs.Screen
-                name="areas"
-                options={{
-                    title: 'Areas',
-                    tabBarIcon: ({ color }) => (
-                        <Feather size={28} name="map-pin" color={color} />
+                        <Feather size={28} name="list" color={color} />
                     ),
                 }}
             />
             <Tabs.Screen
                 name="profile"
                 options={{
-                    title: 'Perfil',
+                    title: "Perfil",
                     tabBarIcon: ({ color }) => (
                         <Feather size={28} name="user" color={color} />
                     ),
                 }}
             />
         </Tabs>
-    )
-}
+    );
+};

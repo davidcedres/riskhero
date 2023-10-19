@@ -20,6 +20,9 @@ import { UserButton } from "@clerk/clerk-react";
 import New from "./Inspections/New";
 import Inspections from "./Inspections/Main";
 import Logo from "../assets/logo2.png";
+import { IconEye, IconReport, IconUsers } from "@tabler/icons-react";
+import Reports from "./Reports";
+import Users from "./Users/Main";
 
 const Layout = () => {
     const [opened, { toggle }] = useDisclosure();
@@ -55,7 +58,13 @@ const Layout = () => {
                         style={{ textDecoration: "none", color: "black" }}
                     >
                         {({ isActive }) => (
-                            <NavLink label="Inspecciones" active={isActive} />
+                            <NavLink
+                                leftSection={
+                                    <IconEye size="1rem" stroke={1.5} />
+                                }
+                                label="Inspecciones"
+                                active={isActive}
+                            />
                         )}
                     </RouterLink>
 
@@ -64,7 +73,13 @@ const Layout = () => {
                         style={{ textDecoration: "none", color: "black" }}
                     >
                         {({ isActive }) => (
-                            <NavLink label="Reportes" active={isActive} />
+                            <NavLink
+                                leftSection={
+                                    <IconReport size="1rem" stroke={1.5} />
+                                }
+                                label="Reportes"
+                                active={isActive}
+                            />
                         )}
                     </RouterLink>
 
@@ -74,6 +89,9 @@ const Layout = () => {
                     >
                         {({ isActive }) => (
                             <NavLink
+                                leftSection={
+                                    <IconUsers size="1rem" stroke={1.5} />
+                                }
                                 label="Usuarios"
                                 active={isActive}
                                 variant="filled"
@@ -84,7 +102,7 @@ const Layout = () => {
             </AppShell.Navbar>
 
             <AppShell.Main>
-                <Container py="xl">
+                <Container fluid>
                     <Outlet />
                 </Container>
             </AppShell.Main>
@@ -104,7 +122,9 @@ const Welcome = () => {
                         <Route path="new" element={<New />} />
                     </Route>
 
-                    <Route path="/reports" element={<Inspections />} />
+                    <Route path="/reports" element={<Reports />} />
+
+                    <Route path="/users" element={<Users />} />
                 </Route>
             </Routes>
         </BrowserRouter>

@@ -1,16 +1,16 @@
-import { StyleSheet } from 'react-native'
-import Typography from './Typography'
-import VStack from './VStack'
-import { FC } from 'react'
+import { StyleSheet } from "react-native";
+import Typography from "./Typography";
+import VStack from "./VStack";
+import { FC } from "react";
 import {
     Condition,
     State,
     getStateColor,
     getStateIcon,
     getStateLabel,
-} from '../state/interfaces'
-import HStack from './HStack'
-import Feather from '@expo/vector-icons/Feather'
+} from "../state/interfaces";
+import HStack from "./HStack";
+import Feather from "@expo/vector-icons/Feather";
 
 const ConditionCard: FC<{ condition: Condition; state?: State }> = ({
     condition,
@@ -22,7 +22,7 @@ const ConditionCard: FC<{ condition: Condition; state?: State }> = ({
                 <Typography variant="subtitle">{condition.name}</Typography>
 
                 <Typography variant="body">
-                    {state === undefined ? 'Pendiente' : getStateLabel(state)}
+                    {state === undefined ? "Pendiente" : getStateLabel(state)}
                 </Typography>
             </VStack>
 
@@ -35,17 +35,17 @@ const ConditionCard: FC<{ condition: Condition; state?: State }> = ({
                 />
             )}
         </HStack>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     base: {
-        borderBottomWidth: 1,
-        paddingBottom: 32,
-        borderColor: '#C0C0C0',
-        marginTop: 16,
-        alignItems: 'center',
+        borderColor: "#e2e8f0",
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: 16,
+        alignItems: "center",
     },
-})
+});
 
-export default ConditionCard
+export default ConditionCard;

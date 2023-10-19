@@ -1,25 +1,35 @@
-import express, { Express } from "express";
-import dotenv from "dotenv";
-import inspections from "./controllers/inspections.js";
 import areas from "./controllers/areas.js";
+import cors from "cors";
+import dotenv from "dotenv";
+import express, { Express } from "express";
+import inspections from "./controllers/inspections.js";
+import sessions from "./controllers/sessions.js";
 import users from "./controllers/users.js";
-import cors from 'cors'
+import morgan from "morgan";
+import categories from "./controllers/categories.js";
+import observations from "./controllers/observations.js";
+import evidences from "./controllers/evidences.js";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
+app.use(morgan("tiny"));
 
-app.use('/areas', areas)
-app.use('/inspections', inspections)
-app.use('/users', users)
+app.use("/areas", areas);
+app.use("/inspections", inspections);
+app.use("/users", users);
+app.use("/sessions", sessions);
+app.use("/categories", categories);
+app.use("/observations", observations);
+app.use("/evidences", evidences);
 
 // app.get("/users", async (req: Request, res: Response) => {
-//   const users = await prismaClient.user.findMany();
-//   res.json(users);
+//     const users = await prismaClient.user.findMany();
+//     res.json(users);
 // });
 
 // app.post("/users", async (req: Request, res: Response) => {
@@ -50,7 +60,6 @@ app.use('/users', users)
 //   });
 //   res.json(area);
 // });
-
 
 // app.get("/observations", async (req: Request, res: Response) => {
 //   const observations = await prismaClient.observation.findMany();
@@ -116,5 +125,5 @@ app.use('/users', users)
 // });
 
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
