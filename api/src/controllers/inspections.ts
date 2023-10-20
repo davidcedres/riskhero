@@ -2,9 +2,19 @@ import { PrismaClient } from "@prisma/client";
 import { validateRequest } from "zod-express-middleware";
 import { z } from "zod";
 import express from "express";
+import { Client as MinioClient } from "minio";
+import { keyBy } from "lodash-es";
 
 const prismaClient = new PrismaClient();
 const inspections = express.Router();
+
+const minioClient = new MinioClient({
+    endPoint: "files.riskninja.io",
+    port: 443,
+    useSSL: true,
+    accessKey: process.env.MINIO_ACCESS_KEY_ID!,
+    secretKey: process.env.MINIO_SECRET_ACCESS_KEY!,
+});
 
 inspections.get("/", async (req, res) => {
     const inspections = await prismaClient.inspection.findMany({
@@ -18,6 +28,20 @@ inspections.get("/", async (req, res) => {
     });
 
     res.json(inspections);
+});
+
+inspections.get("/:id", async (req, res) => {
+    const inspection = await prismaClient.inspection.findFirstOrThrow({
+        where: {
+            id: Number(req.params.id),
+        },
+        include: {
+            area: true,
+            inspector: true,
+        },
+    });
+
+    res.json(inspection);
 });
 
 inspections.post(

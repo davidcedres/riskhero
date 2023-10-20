@@ -17,12 +17,15 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { UserButton } from "@clerk/clerk-react";
-import New from "./Inspections/New";
+import NewInspection from "./Inspections/New";
 import Inspections from "./Inspections/Main";
 import Logo from "../assets/logo2.png";
 import { IconEye, IconReport, IconUsers } from "@tabler/icons-react";
-import Reports from "./Reports";
+import Reports from "./Reports/Main";
 import Users from "./Users/Main";
+import Details from "./Inspections/Details";
+import NewReport from "./Reports/New";
+import colors from "../colors";
 
 const Layout = () => {
     const [opened, { toggle }] = useDisclosure();
@@ -119,10 +122,14 @@ const Welcome = () => {
 
                     <Route path="/inspections">
                         <Route index element={<Inspections />} />
-                        <Route path="new" element={<New />} />
+                        <Route path="new" element={<NewInspection />} />
+                        <Route path=":id" element={<Details />} />
                     </Route>
 
-                    <Route path="/reports" element={<Reports />} />
+                    <Route path="/reports">
+                        <Route index element={<Reports />} />
+                        <Route path="new" element={<NewReport />} />
+                    </Route>
 
                     <Route path="/users" element={<Users />} />
                 </Route>

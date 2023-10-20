@@ -25,3 +25,64 @@ export interface InspectionExtended extends Omit<Inspection, "date"> {
     inspector: User;
     date: string;
 }
+
+export interface Category {
+    id: number;
+    name: string;
+    conditions: Condition[];
+    updatedAt: Date;
+}
+
+export interface Condition {
+    id: number;
+    name: string;
+}
+
+export interface Observation {
+    id: string;
+    state: State;
+    description: string;
+
+    inspectionId: number;
+    categoryId: number;
+    conditionId: number;
+}
+
+export enum State {
+    ACCEPTABLE = "ACCEPTABLE",
+    UNSAFE = "UNSAFE",
+    MISSING = "MISSING",
+    NEEDS_REPAIR = "NEEDS_REPAIR",
+    SKIPPED = "SKIPPED",
+}
+
+export const getStateColor = (state: State) => {
+    const map: Record<State, "green" | "red" | "slate"> = {
+        [State.ACCEPTABLE]: "green",
+        [State.UNSAFE]: "red",
+        [State.MISSING]: "red",
+        [State.NEEDS_REPAIR]: "red",
+        [State.SKIPPED]: "slate",
+    };
+
+    return map[state];
+};
+
+export const getStateTranslation = (state: State) => {
+    const map: Record<
+        State,
+        | "Aceptable"
+        | "Inseguro"
+        | "Faltante"
+        | "Necesita Reparacion"
+        | "Omitido"
+    > = {
+        [State.ACCEPTABLE]: "Aceptable",
+        [State.UNSAFE]: "Inseguro",
+        [State.MISSING]: "Faltante",
+        [State.NEEDS_REPAIR]: "Necesita Reparacion",
+        [State.SKIPPED]: "Omitido",
+    };
+
+    return map[state];
+};

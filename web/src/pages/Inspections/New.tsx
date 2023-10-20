@@ -42,7 +42,7 @@ const schema = yup
     })
     .required();
 
-const New = () => {
+const NewInspection = () => {
     const navigate = useNavigate();
 
     const { handleSubmit, control } = useForm<Form>({
@@ -161,4 +161,4 @@ const New = () => {
     );
 };
 
-export default New;
+export default NewInspection;

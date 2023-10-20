@@ -7,7 +7,18 @@ const prismaClient = new PrismaClient();
 const observations = express.Router();
 
 observations.get("/", async (req, res) => {
-    const observations = await prismaClient.observation.findMany();
+    const { inspectionId } = req.query;
+
+    const observations = await prismaClient.observation.findMany({
+        where: {
+            inspectionId: Number(inspectionId),
+        },
+        include: {
+            category: true,
+            condition: true,
+        },
+    });
+
     res.json(observations);
 });
 

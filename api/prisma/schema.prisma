@@ -72,10 +72,19 @@ model Observation {
     evidences   Evidence[]
     description String
 
+    // add caption or text field that will feed the report itself
+    // analysis String
+
     inspectionId Int
     conditionId  Int
     categoryId   Int
     updatedAt    DateTime
+}
+
+model Report {
+    id Int @id @default(autoincrement())
+
+    inspectionId Int
 }
 
 model Category {
