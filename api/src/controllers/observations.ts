@@ -47,4 +47,40 @@ observations.post(
     }
 );
 
+observations.patch(
+    "/:id",
+    validateRequest({
+        body: z.object({
+            analysis: z.string(),
+        }),
+    }),
+    async (req, res) => {
+        // const observation = await prismaClient.observation.findFirstOrThrow({
+        //     where: {
+        //         id: 15,
+        //     },
+        //     include: {
+        //         inspection: true,
+        //     },
+        // });
+
+        // NOT FOUND
+        // if (observation === null) return res.status(404);
+
+        // NOT ALLOWED
+        // if (observation.inspection.status === "CLOSED") return res.status(401);
+
+        const observation = await prismaClient.observation.update({
+            where: {
+                id: Number(req.params.id),
+            },
+            data: {
+                analysis: req.body.analysis,
+            },
+        });
+
+        res.json(observation);
+    }
+);
+
 export default observations;

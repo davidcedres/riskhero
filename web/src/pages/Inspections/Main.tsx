@@ -1,16 +1,22 @@
+import { Area, Inspection, User } from "../../api/interfaces";
 import { Badge, Button, Flex, Stack, Table, Text, Title } from "@mantine/core";
-import { useQuery } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
-import api from "../../api/api";
-import { Inspection, InspectionExtended } from "../../api/interfaces";
 import { format } from "date-fns";
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import api from "../../api/api";
 import es from "date-fns/locale/es";
 
 const Inspections = () => {
     const navigate = useNavigate();
 
     const query = useQuery(["FetchInspections"], () =>
-        api.get<InspectionExtended[]>("/inspections")
+        api.get<
+            (Inspection & {
+                area: Area;
+                inspector: User;
+                date: string;
+            })[]
+        >("/inspections")
     );
 
     const inspections =
@@ -38,6 +44,11 @@ const Inspections = () => {
             },
         };
 
+        const typeMap: Record<Inspection["type"], string> = {
+            ANNOUNCED: "Anunciada",
+            UNANNOUNCED: "No Anunciada",
+        };
+
         const onClick = () => {
             navigate(String(inspection.id));
         };
@@ -52,7 +63,7 @@ const Inspections = () => {
                     <Text>{inspection.area.name}</Text>
                 </Table.Td>
                 <Table.Td>
-                    <Badge color="black">
+                    <Badge variant="light">
                         {format(inspection.date, "MMMM dd,  h:mm bbb", {
                             locale: es,
                         })}
@@ -64,10 +75,12 @@ const Inspections = () => {
                     </Flex>
                 </Table.Td>
                 <Table.Td>
-                    <Badge color="green">{inspection.type}</Badge>
+                    <Badge color="green" variant="light">
+                        {typeMap[inspection.type]}
+                    </Badge>
                 </Table.Td>
                 <Table.Td>
-                    <Badge color="orange">
+                    <Badge color="orange" variant="light">
                         {actionMap[inspection.status].label}
                     </Badge>
                 </Table.Td>
@@ -80,7 +93,7 @@ const Inspections = () => {
             <Flex justify="space-between">
                 <Title>Inspecciones</Title>
 
-                <Button component={Link} to="new" color="black">
+                <Button component={Link} to="new">
                     Nueva
                 </Button>
             </Flex>

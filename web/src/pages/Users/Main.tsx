@@ -10,7 +10,7 @@ const Users = () => {
         <Stack>
             <Flex justify="space-between" mb="lg">
                 <Title>Usuarios</Title>
-                <Button variant="gradient">Nuevo</Button>
+                <Button>Nuevo</Button>
             </Flex>
 
             {query.data?.data.map((user) => (

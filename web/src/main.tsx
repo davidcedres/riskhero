@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, createTheme } from "@mantine/core";
 import {
     ClerkProvider,
     RedirectToSignIn,
@@ -47,10 +47,23 @@ const queryClient = new QueryClient({
     },
 });
 
+const myTheme = createTheme({
+    primaryColor: "indigo",
+    defaultRadius: 8,
+    components: {
+        Title: {
+            defaultProps: {
+                // fz: 99,
+                fw: 800,
+            },
+        },
+    },
+});
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-            <MantineProvider>
+            <MantineProvider theme={myTheme}>
                 <ClerkProvider publishableKey={clerkPubKey}>
                     <SignedIn>
                         <Welcome />

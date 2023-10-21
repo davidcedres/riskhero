@@ -3,18 +3,9 @@ import { validateRequest } from "zod-express-middleware";
 import { z } from "zod";
 import express from "express";
 import { Client as MinioClient } from "minio";
-import { keyBy } from "lodash-es";
 
 const prismaClient = new PrismaClient();
 const inspections = express.Router();
-
-const minioClient = new MinioClient({
-    endPoint: "files.riskninja.io",
-    port: 443,
-    useSSL: true,
-    accessKey: process.env.MINIO_ACCESS_KEY_ID!,
-    secretKey: process.env.MINIO_SECRET_ACCESS_KEY!,
-});
 
 inspections.get("/", async (req, res) => {
     const inspections = await prismaClient.inspection.findMany({

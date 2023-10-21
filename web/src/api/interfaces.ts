@@ -20,10 +20,15 @@ export interface Inspection {
     status: "OPEN" | "CLOSED" | "DONE";
 }
 
-export interface InspectionExtended extends Omit<Inspection, "date"> {
-    area: Area;
-    inspector: User;
-    date: string;
+export interface Report {
+    id: number;
+    conclusion: string;
+    inspection: Inspection & {
+        area: Area;
+        inspector: User;
+        date: string;
+    };
+    inspectionId: number;
 }
 
 export interface Category {
@@ -39,9 +44,10 @@ export interface Condition {
 }
 
 export interface Observation {
-    id: string;
+    id: number;
     state: State;
     description: string;
+    analysis?: string;
 
     inspectionId: number;
     categoryId: number;

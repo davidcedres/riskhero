@@ -13,9 +13,8 @@ import {
     Flex,
     Image,
     NavLink,
-    Stack,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { UserButton } from "@clerk/clerk-react";
 import NewInspection from "./Inspections/New";
 import Inspections from "./Inspections/Main";
@@ -23,12 +22,15 @@ import Logo from "../assets/logo2.png";
 import { IconEye, IconReport, IconUsers } from "@tabler/icons-react";
 import Reports from "./Reports/Main";
 import Users from "./Users/Main";
-import Details from "./Inspections/Details";
+import InspectionDetails from "./Inspections/Details";
 import NewReport from "./Reports/New";
-import colors from "../colors";
+import ReportDetails from "./Reports/Details";
 
 const Layout = () => {
     const [opened, { toggle }] = useDisclosure();
+    const isPrint = useMediaQuery("print");
+
+    if (isPrint) return <Outlet />;
 
     return (
         <AppShell
@@ -55,53 +57,40 @@ const Layout = () => {
             </AppShell.Header>
 
             <AppShell.Navbar p="md">
-                <Stack>
+                {[
+                    {
+                        to: "/inspections",
+                        icon: IconEye,
+                        label: "Inspecciones",
+                    },
+                    {
+                        to: "/reports",
+                        icon: IconReport,
+                        label: "Informes",
+                    },
+                    {
+                        to: "/users",
+                        icon: IconUsers,
+                        label: "Usuarios",
+                    },
+                ].map((link) => (
                     <RouterLink
-                        to="/inspections"
+                        to={link.to}
                         style={{ textDecoration: "none", color: "black" }}
                     >
                         {({ isActive }) => (
                             <NavLink
                                 leftSection={
-                                    <IconEye size="1rem" stroke={1.5} />
+                                    <link.icon size="1.5rem" stroke={1.5} />
                                 }
-                                label="Inspecciones"
+                                label={link.label}
                                 active={isActive}
+                                style={{ borderRadius: 8 }}
+                                p="sm"
                             />
                         )}
                     </RouterLink>
-
-                    <RouterLink
-                        to="/reports"
-                        style={{ textDecoration: "none", color: "black" }}
-                    >
-                        {({ isActive }) => (
-                            <NavLink
-                                leftSection={
-                                    <IconReport size="1rem" stroke={1.5} />
-                                }
-                                label="Reportes"
-                                active={isActive}
-                            />
-                        )}
-                    </RouterLink>
-
-                    <RouterLink
-                        to="/users"
-                        style={{ textDecoration: "none", color: "black" }}
-                    >
-                        {({ isActive }) => (
-                            <NavLink
-                                leftSection={
-                                    <IconUsers size="1rem" stroke={1.5} />
-                                }
-                                label="Usuarios"
-                                active={isActive}
-                                variant="filled"
-                            />
-                        )}
-                    </RouterLink>
-                </Stack>
+                ))}
             </AppShell.Navbar>
 
             <AppShell.Main>
@@ -123,12 +112,13 @@ const Welcome = () => {
                     <Route path="/inspections">
                         <Route index element={<Inspections />} />
                         <Route path="new" element={<NewInspection />} />
-                        <Route path=":id" element={<Details />} />
+                        <Route path=":id" element={<InspectionDetails />} />
                     </Route>
 
                     <Route path="/reports">
                         <Route index element={<Reports />} />
                         <Route path="new" element={<NewReport />} />
+                        <Route path=":id" element={<ReportDetails />} />
                     </Route>
 
                     <Route path="/users" element={<Users />} />

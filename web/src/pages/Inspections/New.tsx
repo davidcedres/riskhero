@@ -1,11 +1,4 @@
-import {
-    Anchor,
-    Breadcrumbs,
-    Button,
-    Select,
-    Stack,
-    Title,
-} from "@mantine/core";
+import { Anchor, Button, Select, Stack, Title } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,15 +9,6 @@ import api from "../../api/api";
 import { useMemo } from "react";
 import { Area, Inspection, User } from "../../api/interfaces";
 import toast from "react-hot-toast";
-
-const items = [
-    { title: "Inspecciones", to: "/inspections" },
-    { title: "Nueva", to: "#" },
-].map((item, index) => (
-    <Anchor component={Link} to={item.to} key={index}>
-        {item.title}
-    </Anchor>
-));
 
 interface Form {
     area: string;
@@ -86,8 +70,11 @@ const NewInspection = () => {
     };
 
     return (
-        <Stack>
-            <Breadcrumbs>{items}</Breadcrumbs>
+        <Stack maw={512}>
+            <Anchor component={Link} to="/inspections">
+                ← Inspecciones
+            </Anchor>
+
             <Title>Nueva Inspección</Title>
 
             <Controller

@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
-import { faker } from "@faker-js/faker";
 import { hashSync } from "bcrypt";
 
 dotenv.config();
@@ -38,82 +37,42 @@ await prisma.user.create({
 await prisma.area.createMany({
     data: [
         {
-            name: faker.location.streetAddress(),
+            name: "Pista de Atletismo, Hechicera",
             organizationId: organization.id,
             updatedAt: new Date(),
         },
         {
-            name: faker.location.streetAddress(),
+            name: "Cancha de Baloncesto, Hechicera",
             organizationId: organization.id,
             updatedAt: new Date(),
         },
         {
-            name: faker.location.streetAddress(),
+            name: "Laboratorio de Quimica, Facultad de Ciencias",
             organizationId: organization.id,
             updatedAt: new Date(),
         },
         {
-            name: faker.location.streetAddress(),
+            name: "Laboratorio de Fisica, Facultad de Ciencias",
             organizationId: organization.id,
             updatedAt: new Date(),
         },
         {
-            name: faker.location.streetAddress(),
+            name: "Laboratorio de Suelos",
             organizationId: organization.id,
             updatedAt: new Date(),
         },
         {
-            name: faker.location.streetAddress(),
+            name: "Aserradero, Santa Rosa",
             organizationId: organization.id,
             updatedAt: new Date(),
         },
         {
-            name: faker.location.streetAddress(),
+            name: "Nucleo Universitario Alberto Adriani",
             organizationId: organization.id,
             updatedAt: new Date(),
         },
         {
-            name: faker.location.streetAddress(),
-            organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-        {
-            name: faker.location.streetAddress(),
-            organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-        {
-            name: faker.location.streetAddress(),
-            organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-        {
-            name: faker.location.streetAddress(),
-            organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-        {
-            name: faker.location.streetAddress(),
-            organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-        {
-            name: faker.location.streetAddress(),
-            organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-        {
-            name: faker.location.streetAddress(),
-            organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-        {
-            name: faker.location.streetAddress(),
-            organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-        {
-            name: faker.location.streetAddress(),
+            name: "Laboratorio de Audicion, Facultad de Idiomas",
             organizationId: organization.id,
             updatedAt: new Date(),
         },

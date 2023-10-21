@@ -1,10 +1,8 @@
 import {
     Anchor,
     Badge,
-    Breadcrumbs,
     Button,
     Flex,
-    Group,
     SimpleGrid,
     Stack,
     Text,
@@ -68,21 +66,15 @@ const Details = () => {
 
     return (
         <Stack>
-            <Breadcrumbs>
-                <Anchor component={Link} to="/inspections">
-                    Inspecciones
-                </Anchor>
-
-                <Anchor component={Link} to="#">
-                    {inspectionRequest.data.data.area.name}
-                </Anchor>
-            </Breadcrumbs>
+            <Anchor component={Link} to="/inspections">
+                ← Inspecciones
+            </Anchor>
 
             <Flex justify="space-between" my="md">
                 <Stack gap="xs">
                     <Title>{inspectionRequest.data.data.area.name}</Title>
 
-                    <Badge color="black">
+                    <Badge variant="light">
                         {format(
                             new Date(inspectionRequest.data.data.date),
                             "MMMM dd - h:mm bbb",
@@ -95,7 +87,6 @@ const Details = () => {
 
                 {inspectionRequest.data.data.status === "CLOSED" && (
                     <Button
-                        color="black"
                         component={Link}
                         to="/reports/new"
                         state={{ inspectionId: id }}

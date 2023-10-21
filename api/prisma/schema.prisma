@@ -8,36 +8,29 @@ datasource db {
 }
 
 model Organization {
-    id   Int    @id @default(autoincrement())
-    name String @unique
-
+    id    Int    @id @default(autoincrement())
+    name  String @unique
     users User[]
     areas Area[]
 }
 
 model User {
-    id Int @id @default(autoincrement())
-
-    email    String @unique
-    password String
-
-    name String
-    role Role
-
-    organization Organization @relation(fields: [organizationId], references: [id])
-    inspections  Inspection[]
-
+    id             Int          @id @default(autoincrement())
+    email          String       @unique
+    password       String
+    name           String
+    role           Role
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    inspections    Inspection[]
     organizationId Int
     updatedAt      DateTime
 }
 
 model Area {
-    id   Int    @id @default(autoincrement())
-    name String
-
-    organization Organization @relation(fields: [organizationId], references: [id])
-    inspections  Inspection[]
-
+    id             Int          @id @default(autoincrement())
+    name           String
+    organization   Organization @relation(fields: [organizationId], references: [id])
+    inspections    Inspection[]
     organizationId Int
     updatedAt      DateTime
 
@@ -46,35 +39,28 @@ model Area {
 }
 
 model Inspection {
-    id        Int      @id @default(autoincrement())
-    area      Area     @relation(fields: [areaId], references: [id])
-    inspector User     @relation(fields: [userId], references: [id])
-    type      Type
-    date      DateTime
-    status    Status
-
+    id           Int           @id @default(autoincrement())
+    area         Area          @relation(fields: [areaId], references: [id])
+    inspector    User          @relation(fields: [userId], references: [id])
     observations Observation[]
-
-    areaId Int
-    userId Int
-
-    updatedAt DateTime
+    Report       Report[]
+    status       Status
+    type         Type
+    date         DateTime
+    areaId       Int
+    userId       Int
+    updatedAt    DateTime
 }
 
 model Observation {
-    id    Int   @id @default(autoincrement())
-    state State
-
-    inspection Inspection @relation(fields: [inspectionId], references: [id])
-    condition  Condition  @relation(fields: [conditionId], references: [id])
-    category   Category   @relation(fields: [categoryId], references: [id])
-
-    evidences   Evidence[]
-    description String
-
-    // add caption or text field that will feed the report itself
-    // analysis String
-
+    id           Int        @id @default(autoincrement())
+    state        State
+    inspection   Inspection @relation(fields: [inspectionId], references: [id])
+    condition    Condition  @relation(fields: [conditionId], references: [id])
+    category     Category   @relation(fields: [categoryId], references: [id])
+    evidences    Evidence[]
+    description  String
+    analysis     String?
     inspectionId Int
     conditionId  Int
     categoryId   Int
@@ -82,33 +68,32 @@ model Observation {
 }
 
 model Report {
-    id Int @id @default(autoincrement())
-
-    inspectionId Int
+    id           Int        @id @default(autoincrement())
+    inspection   Inspection @relation(fields: [inspectionId], references: [id])
+    inspectionId Int        @unique
+    conclusion   String
+    createdAt    DateTime
 }
 
 model Category {
-    id   Int    @id @default(autoincrement())
-    name String @unique
-
+    id          Int           @id @default(autoincrement())
+    name        String        @unique
     conditions  Condition[]
     updatedAt   DateTime
     Observation Observation[]
 }
 
 model Condition {
-    id   Int    @id @default(autoincrement())
-    name String @unique
-
+    id           Int           @id @default(autoincrement())
+    name         String        @unique
     observations Observation[]
     categories   Category[]
     updatedAt    DateTime
 }
 
 model Evidence {
-    id  Int    @id @default(autoincrement())
-    key String
-
+    id            Int         @id @default(autoincrement())
+    key           String
     observation   Observation @relation(fields: [observationId], references: [id])
     observationId Int
     updatedAt     DateTime
