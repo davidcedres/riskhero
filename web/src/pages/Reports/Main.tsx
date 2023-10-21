@@ -22,7 +22,7 @@ const Reports = () => {
 
     return (
         <Stack>
-            <Title>Reportes</Title>
+            <Title>Informes</Title>
 
             <Table verticalSpacing="lg">
                 <Table.Thead>

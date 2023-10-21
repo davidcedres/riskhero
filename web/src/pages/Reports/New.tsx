@@ -145,7 +145,7 @@ const NewReport = () => {
                     ← Informes
                 </Anchor>
 
-                <Title my="md">Nuevo Reporte</Title>
+                <Title my="md">Nuevo Informe</Title>
 
                 <Text>
                     Para la inspección llevada acabo en{" "}
