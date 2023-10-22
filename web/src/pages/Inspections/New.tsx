@@ -1,73 +1,73 @@
-import { Anchor, Button, Select, Stack, Title } from "@mantine/core";
-import { DateTimePicker } from "@mantine/dates";
-import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useMutation, useQuery } from "react-query";
-import api from "../../api/api";
-import { useMemo } from "react";
-import { Area, Inspection, User } from "../../api/interfaces";
-import toast from "react-hot-toast";
+import { Anchor, Button, Select, Stack, Title } from '@mantine/core'
+import { DateTimePicker } from '@mantine/dates'
+import { Controller, useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { useMutation, useQuery } from 'react-query'
+import api from '../../api/api'
+import { useMemo } from 'react'
+import { Area, Inspection, User } from '../../api/interfaces'
+import toast from 'react-hot-toast'
 
 interface Form {
-    area: string;
-    inspector: string;
-    type: Inspection["type"];
-    date: Date;
+    area: string
+    inspector: string
+    type: Inspection['type']
+    date: Date
 }
 
 const schema = yup
     .object({
         area: yup.string().required(),
         inspector: yup.string().required(),
-        type: yup.string().oneOf(["ANNOUNCED", "UNANNOUNCED"]).required(),
-        date: yup.date().required(),
+        type: yup.string().oneOf(['ANNOUNCED', 'UNANNOUNCED']).required(),
+        date: yup.date().required()
     })
-    .required();
+    .required()
 
 const NewInspection = () => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const { handleSubmit, control } = useForm<Form>({
-        resolver: yupResolver(schema),
-    });
+        resolver: yupResolver(schema)
+    })
 
-    const areasRequest = useQuery(["FetchAreas"], () =>
-        api.get<Area[]>("/areas")
-    );
-    const usersRequest = useQuery(["FetchUsers"], () =>
-        api.get<User[]>("/users")
-    );
+    const areasRequest = useQuery(['FetchAreas'], () =>
+        api.get<Area[]>('/areas')
+    )
+    const usersRequest = useQuery(['FetchUsers'], () =>
+        api.get<User[]>('/users')
+    )
     const saveRequest = useMutation(
-        (data: Omit<Inspection, "id" | "observations">) =>
-            api.post("/inspections", data)
-    );
+        (data: Omit<Inspection, 'id' | 'observations'>) =>
+            api.post('/inspections', data)
+    )
 
     const areas = useMemo(
         () => areasRequest.data?.data ?? [],
         [areasRequest.data?.data]
-    );
+    )
 
     const users = useMemo(
         () => usersRequest.data?.data ?? [],
         [usersRequest.data?.data]
-    );
+    )
 
     const onSubmit = async (data: Form) => {
         await saveRequest.mutateAsync({
             ...data,
             areaId: Number(data.area),
             userId: Number(data.inspector),
-            status: "OPEN",
-        });
+            status: 'OPEN'
+        })
 
-        navigate("/", {
-            replace: true,
-        });
+        navigate('/', {
+            replace: true
+        })
 
-        toast.success("Inspección guardada");
-    };
+        toast.success('Inspección guardada')
+    }
 
     return (
         <Stack maw={512}>
@@ -87,7 +87,7 @@ const NewInspection = () => {
                         placeholder="Seleccione area a inspeccionar"
                         data={areas.map((area) => ({
                             value: String(area.id),
-                            label: area.name,
+                            label: area.name
                         }))}
                     />
                 )}
@@ -103,7 +103,7 @@ const NewInspection = () => {
                         placeholder="Seleccione un inspector"
                         data={users.map((user) => ({
                             value: String(user.id),
-                            label: user.name,
+                            label: user.name
                         }))}
                     />
                 )}
@@ -119,13 +119,13 @@ const NewInspection = () => {
                         placeholder="Tipo de inspección"
                         data={[
                             {
-                                value: "ANNOUNCED",
-                                label: "Anunciada",
+                                value: 'ANNOUNCED',
+                                label: 'Anunciada'
                             },
                             {
-                                value: "UNANNOUNCED",
-                                label: "No Anunciada",
-                            },
+                                value: 'UNANNOUNCED',
+                                label: 'No Anunciada'
+                            }
                         ]}
                     />
                 )}
@@ -145,7 +145,7 @@ const NewInspection = () => {
 
             <Button onClick={handleSubmit(onSubmit)}>Guardar</Button>
         </Stack>
-    );
-};
+    )
+}
 
-export default NewInspection;
+export default NewInspection

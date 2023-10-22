@@ -4,79 +4,68 @@ import {
     Outlet,
     Route,
     Routes,
-    NavLink as RouterLink,
-} from "react-router-dom";
-import {
-    AppShell,
-    Burger,
-    Container,
-    Flex,
-    Image,
-    NavLink,
-} from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { UserButton } from "@clerk/clerk-react";
-import NewInspection from "./Inspections/New";
-import Inspections from "./Inspections/Main";
-import Logo from "../assets/logo2.png";
-import { IconEye, IconReport, IconUsers } from "@tabler/icons-react";
-import Reports from "./Reports/Main";
-import Users from "./Users/Main";
-import InspectionDetails from "./Inspections/Details";
-import NewReport from "./Reports/New";
-import ReportDetails from "./Reports/Details";
+    NavLink as RouterLink
+} from 'react-router-dom'
+import { AppShell, Burger, Container, Flex, NavLink, Text } from '@mantine/core'
+import { useDisclosure, useMediaQuery } from '@mantine/hooks'
+import NewInspection from './Inspections/New'
+import Inspections from './Inspections/Main'
+import { IconEye, IconReport, IconUsers } from '@tabler/icons-react'
+import Reports from './Reports/Main'
+import Users from './Users/Main'
+import InspectionDetails from './Inspections/Details'
+import NewReport from './Reports/New'
+import ReportDetails from './Reports/Details'
+import UserButton from '../components/UserButton'
 
 const Layout = () => {
-    const [opened, { toggle }] = useDisclosure();
-    const isPrint = useMediaQuery("print");
+    const [opened, { toggle }] = useDisclosure()
+    const isPrint = useMediaQuery('print')
 
-    if (isPrint) return <Outlet />;
+    if (isPrint) return <Outlet />
 
     return (
         <AppShell
-            header={{ height: 84 }}
+            header={{ height: 128 }}
             navbar={{
                 width: 250,
-                breakpoint: "sm",
-                collapsed: { mobile: !opened },
+                breakpoint: 'sm',
+                collapsed: { mobile: !opened }
             }}
-            padding="md"
         >
-            <AppShell.Header>
-                <Burger
-                    opened={opened}
-                    onClick={toggle}
-                    hiddenFrom="sm"
-                    size="sm"
-                />
+            <AppShell.Header withBorder={false} p="lg">
+                <Burger opened={opened} onClick={toggle} hiddenFrom="sm" />
 
-                <Flex p="lg" align="center" justify="space-between">
-                    <Image src={Logo} h={32} />
+                <Flex align="center" justify="space-between">
+                    <Text ff="Oswald Variable" fz={32}>
+                        RISKNINJA
+                    </Text>
+
                     <UserButton />
                 </Flex>
             </AppShell.Header>
 
-            <AppShell.Navbar p="md">
+            <AppShell.Navbar p="md" withBorder={false}>
                 {[
                     {
-                        to: "/inspections",
+                        to: '/inspections',
                         icon: IconEye,
-                        label: "Inspecciones",
+                        label: 'Inspecciones'
                     },
                     {
-                        to: "/reports",
+                        to: '/reports',
                         icon: IconReport,
-                        label: "Informes",
+                        label: 'Informes'
                     },
                     {
-                        to: "/users",
+                        to: '/users',
                         icon: IconUsers,
-                        label: "Usuarios",
-                    },
+                        label: 'Usuarios'
+                    }
                 ].map((link) => (
                     <RouterLink
                         to={link.to}
-                        style={{ textDecoration: "none", color: "black" }}
+                        style={{ textDecoration: 'none', color: 'black' }}
                     >
                         {({ isActive }) => (
                             <NavLink
@@ -85,8 +74,7 @@ const Layout = () => {
                                 }
                                 label={link.label}
                                 active={isActive}
-                                style={{ borderRadius: 8 }}
-                                p="sm"
+                                p="md"
                             />
                         )}
                     </RouterLink>
@@ -99,10 +87,10 @@ const Layout = () => {
                 </Container>
             </AppShell.Main>
         </AppShell>
-    );
-};
+    )
+}
 
-const Welcome = () => {
+const Private = () => {
     return (
         <BrowserRouter>
             <Routes>
@@ -122,10 +110,12 @@ const Welcome = () => {
                     </Route>
 
                     <Route path="/users" element={<Users />} />
+
+                    <Route path="*" element={<Navigate to="/inspections" />} />
                 </Route>
             </Routes>
         </BrowserRouter>
-    );
-};
+    )
+}
 
-export default Welcome;
+export default Private

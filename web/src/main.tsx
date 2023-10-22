@@ -1,79 +1,68 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { MantineProvider, createTheme } from "@mantine/core";
-import {
-    ClerkProvider,
-    RedirectToSignIn,
-    SignedIn,
-    SignedOut,
-} from "@clerk/clerk-react";
-import Welcome from "./pages/Welcome.tsx";
+import '@fontsource/roboto-condensed/700.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/700.css'
+import '@fontsource-variable/oswald'
 
-import "@mantine/core/styles.css";
-import "@mantine/dates/styles.css";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { AxiosError } from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { startCase } from "lodash";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { MantineProvider, createTheme } from '@mantine/core'
+import { ClerkProvider } from '@clerk/clerk-react'
+
+import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { AxiosError } from 'axios'
+import toast, { Toaster } from 'react-hot-toast'
+import { startCase } from 'lodash'
+
+import App from './App.tsx'
 
 if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
-    throw new Error("Missing Publishable Key");
+    throw new Error('Missing Publishable Key')
 }
 
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string
 
 const queryClient = new QueryClient({
     defaultOptions: {
         mutations: {
             onError: (error) => {
                 if (!(error instanceof AxiosError)) {
-                    toast.error("Oops");
-                    return;
+                    toast.error('Oops')
+                    return
                 }
 
-                (
+                ;(
                     error.response?.data[0].errors.issues as {
-                        code: string;
-                        message: string;
-                        path: string[];
+                        code: string
+                        message: string
+                        path: string[]
                     }[]
                 ).forEach((issue) => {
-                    toast.error(
-                        `${startCase(issue.path[0])}: ${issue.message}`
-                    );
-                });
-            },
-        },
-    },
-});
+                    toast.error(`${startCase(issue.path[0])}: ${issue.message}`)
+                })
+            }
+        }
+    }
+})
 
 const myTheme = createTheme({
-    primaryColor: "indigo",
-    defaultRadius: 8,
-    components: {
-        Title: {
-            defaultProps: {
-                // fz: 99,
-                fw: 800,
-            },
-        },
-    },
-});
+    primaryColor: 'indigo',
+    defaultRadius: 0,
+    fontFamily: 'Roboto, sans-serif',
+    fontFamilyMonospace: 'Monaco, Courier, monospace',
+    headings: { fontFamily: 'Roboto Condensed, sans-serif' }
+})
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <MantineProvider theme={myTheme}>
                 <ClerkProvider publishableKey={clerkPubKey}>
-                    <SignedIn>
-                        <Welcome />
-                    </SignedIn>
-                    <SignedOut>
-                        <RedirectToSignIn />
-                    </SignedOut>
+                    <App />
                 </ClerkProvider>
             </MantineProvider>
         </QueryClientProvider>
-        <Toaster position="bottom-left" />
+        <Toaster position="bottom-center" />
     </React.StrictMode>
-);
+)

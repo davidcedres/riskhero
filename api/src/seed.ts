@@ -1,192 +1,192 @@
-import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
-import { hashSync } from "bcrypt";
+import dotenv from 'dotenv'
+import { PrismaClient } from '@prisma/client'
+import { hashSync } from 'bcrypt'
 
-dotenv.config();
+dotenv.config()
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 const organization = await prisma.organization.create({
     data: {
-        name: "Universidad De Los Andes",
-    },
-});
+        name: 'Universidad De Los Andes'
+    }
+})
 
 await prisma.user.create({
     data: {
-        email: "david@riskninja.io",
-        name: "David Cedres",
-        role: "MANAGER",
+        email: 'david@riskninja.io',
+        name: 'David Cedres',
+        role: 'MANAGER',
         organizationId: organization.id,
-        password: hashSync("Password.1", Number(process.env.SALT!)),
-        updatedAt: new Date(),
-    },
-});
+        password: hashSync('Password.1', Number(process.env.SALT!)),
+        updatedAt: new Date()
+    }
+})
 
 await prisma.user.create({
     data: {
-        email: "luisa@riskninja.io",
-        name: "Luisa Martinez",
-        role: "EMPLOYEE",
+        email: 'luisa@riskninja.io',
+        name: 'Luisa Martinez',
+        role: 'EMPLOYEE',
         organizationId: organization.id,
-        password: hashSync("Password.1", Number(process.env.SALT!)),
-        updatedAt: new Date(),
-    },
-});
+        password: hashSync('Password.1', Number(process.env.SALT!)),
+        updatedAt: new Date()
+    }
+})
 
 await prisma.area.createMany({
     data: [
         {
-            name: "Pista de Atletismo, Hechicera",
+            name: 'Pista de Atletismo, Hechicera',
             organizationId: organization.id,
-            updatedAt: new Date(),
+            updatedAt: new Date()
         },
         {
-            name: "Cancha de Baloncesto, Hechicera",
+            name: 'Cancha de Baloncesto, Hechicera',
             organizationId: organization.id,
-            updatedAt: new Date(),
+            updatedAt: new Date()
         },
         {
-            name: "Laboratorio de Quimica, Facultad de Ciencias",
+            name: 'Laboratorio de Quimica, Facultad de Ciencias',
             organizationId: organization.id,
-            updatedAt: new Date(),
+            updatedAt: new Date()
         },
         {
-            name: "Laboratorio de Fisica, Facultad de Ciencias",
+            name: 'Laboratorio de Fisica, Facultad de Ciencias',
             organizationId: organization.id,
-            updatedAt: new Date(),
+            updatedAt: new Date()
         },
         {
-            name: "Laboratorio de Suelos",
+            name: 'Laboratorio de Suelos',
             organizationId: organization.id,
-            updatedAt: new Date(),
+            updatedAt: new Date()
         },
         {
-            name: "Aserradero, Santa Rosa",
+            name: 'Aserradero, Santa Rosa',
             organizationId: organization.id,
-            updatedAt: new Date(),
+            updatedAt: new Date()
         },
         {
-            name: "Nucleo Universitario Alberto Adriani",
+            name: 'Nucleo Universitario Alberto Adriani',
             organizationId: organization.id,
-            updatedAt: new Date(),
+            updatedAt: new Date()
         },
         {
-            name: "Laboratorio de Audicion, Facultad de Idiomas",
+            name: 'Laboratorio de Audicion, Facultad de Idiomas',
             organizationId: organization.id,
-            updatedAt: new Date(),
-        },
-    ],
-});
+            updatedAt: new Date()
+        }
+    ]
+})
 
 const baseEntities = [
     {
-        category: "Piso",
+        category: 'Piso',
         conditions: [
-            "Huecos - Desniveles",
-            "Orden y limpieza",
-            "Demarcación de Áreas",
-        ],
+            'Huecos - Desniveles',
+            'Orden y limpieza',
+            'Demarcación de Áreas'
+        ]
     },
     {
-        category: "Paredes",
-        conditions: ["Pintura", "Grietas", "Huecos", "Filtraciones"],
+        category: 'Paredes',
+        conditions: ['Pintura', 'Grietas', 'Huecos', 'Filtraciones']
     },
     {
-        category: "Techo",
-        conditions: ["Pintura", "Huecos - Grietas", "Filtraciones"],
+        category: 'Techo',
+        conditions: ['Pintura', 'Huecos - Grietas', 'Filtraciones']
     },
     {
-        category: "Iluminación",
-        conditions: ["Natural", "Lámparas", "Tubos Fluorecentes"],
+        category: 'Iluminación',
+        conditions: ['Natural', 'Lámparas', 'Tubos Fluorecentes']
     },
     {
-        category: "Ventilación",
-        conditions: ["Natural", "Forzada (Mecánica)"],
+        category: 'Ventilación',
+        conditions: ['Natural', 'Forzada (Mecánica)']
     },
     {
-        category: "Salubridad Básica",
-        conditions: ["Baños", "Vestuarios", "Sala comedor", "Filtros de agua"],
+        category: 'Salubridad Básica',
+        conditions: ['Baños', 'Vestuarios', 'Sala comedor', 'Filtros de agua']
     },
     {
-        category: "Instalaciones y Servicios Básicos",
+        category: 'Instalaciones y Servicios Básicos',
         conditions: [
-            "Agua para Uso Industrial",
-            "Sistema Eléctrico",
-            "Aire Comprimido",
-            "Redes Telefónicas",
-            "Drenajes",
-            "Tuberías en General",
-        ],
+            'Agua para Uso Industrial',
+            'Sistema Eléctrico',
+            'Aire Comprimido',
+            'Redes Telefónicas',
+            'Drenajes',
+            'Tuberías en General'
+        ]
     },
     {
-        category: "Instalaciones Eléctricas",
+        category: 'Instalaciones Eléctricas',
         conditions: [
-            "Codificación de Tableros",
-            "Senalización de Tableros",
-            "Enumeración de Interruptores",
-            "Protección de Instalación Electrica",
-        ],
+            'Codificación de Tableros',
+            'Senalización de Tableros',
+            'Enumeración de Interruptores',
+            'Protección de Instalación Electrica'
+        ]
     },
     {
-        category: "Sistemas y Equipos de Seguridad",
+        category: 'Sistemas y Equipos de Seguridad',
         conditions: [
-            "Sistema de Detección y Alarmas Contra Incendios",
-            "Extintores Portátiles",
-            "Medios de Escape",
-            "Lámparas de Emergencia",
-            "Senalización de Higiene y Seguridad",
-            "Equipos de Protección Personal",
-            "Kit de Primeros Auxilios",
-        ],
+            'Sistema de Detección y Alarmas Contra Incendios',
+            'Extintores Portátiles',
+            'Medios de Escape',
+            'Lámparas de Emergencia',
+            'Senalización de Higiene y Seguridad',
+            'Equipos de Protección Personal',
+            'Kit de Primeros Auxilios'
+        ]
     },
     {
-        category: "Mobiliario y Equipos de Oficina",
+        category: 'Mobiliario y Equipos de Oficina',
         conditions: [
-            "Escritorio",
-            "Silla",
-            "Mesa de Computadora o de Trabajo",
-            "Monitor",
-            "Herramientas de Oficina o de Trabajo",
-            "Distancia entre Mobiliario de Oficina y/o Trabajo",
-            "Área de Trabajo",
-        ],
-    },
-];
+            'Escritorio',
+            'Silla',
+            'Mesa de Computadora o de Trabajo',
+            'Monitor',
+            'Herramientas de Oficina o de Trabajo',
+            'Distancia entre Mobiliario de Oficina y/o Trabajo',
+            'Área de Trabajo'
+        ]
+    }
+]
 
 const conditions = [
-    ...new Set(baseEntities.flatMap(({ conditions }) => conditions)),
-];
+    ...new Set(baseEntities.flatMap(({ conditions }) => conditions))
+]
 
 await Promise.all(
     conditions.map((condition) =>
         prisma.condition.create({
             data: {
                 name: condition,
-                updatedAt: new Date(),
-            },
+                updatedAt: new Date()
+            }
         })
     )
-);
+)
 
 for (const { conditions, category } of baseEntities) {
     const conditionsQuery = await prisma.condition.findMany({
         where: {
             name: {
-                in: conditions,
-            },
-        },
-    });
+                in: conditions
+            }
+        }
+    })
 
-    const ids = conditionsQuery.map((condition) => condition.id);
+    const ids = conditionsQuery.map((condition) => condition.id)
 
     await prisma.category.create({
         data: {
             name: category,
             conditions: {
-                connect: ids.map((id) => ({ id })),
+                connect: ids.map((id) => ({ id }))
             },
-            updatedAt: new Date(),
-        },
-    });
+            updatedAt: new Date()
+        }
+    })
 }
