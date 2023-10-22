@@ -62,38 +62,47 @@ const Start = () => {
                     </Anchor>
                 </Flex>
 
-                <Stack
+                <form
                     style={{
-                        borderColor: colors['slate']['100'],
-                        borderWidth: 2,
-                        borderStyle: 'solid',
-                        alignSelf: 'center',
-                        boxShadow: '0px 8px 24px ' + colors['slate']['100']
+                        alignSelf: 'center'
                     }}
-                    gap="xl"
-                    p="xl"
                 >
-                    <Title order={3}>Iniciar sesión</Title>
+                    <Stack
+                        style={{
+                            borderColor: colors['slate']['100'],
+                            borderWidth: 2,
+                            borderStyle: 'solid',
 
-                    <TextInput
-                        label="Usuario"
-                        placeholder="david@riskninja.io"
-                        {...register('email')}
-                    />
-                    <TextInput
-                        label="Contraseña"
-                        placeholder="123456*"
-                        type="password"
-                        {...register('password')}
-                    />
-
-                    <Button
-                        onClick={handleSubmit(onSubmit)}
-                        loading={loginRequest.isLoading}
+                            boxShadow: '0px 8px 24px ' + colors['slate']['100']
+                        }}
+                        gap="xl"
+                        p="xl"
                     >
-                        Entrar
-                    </Button>
-                </Stack>
+                        <Title order={3}>Iniciar sesión</Title>
+
+                        <TextInput
+                            label="Usuario"
+                            placeholder="david@riskninja.io"
+                            {...register('email')}
+                        />
+                        <TextInput
+                            label="Contraseña"
+                            placeholder="123456*"
+                            type="password"
+                            {...register('password')}
+                        />
+
+                        {loginRequest.isLoading}
+
+                        <Button
+                            onClick={handleSubmit(onSubmit)}
+                            loading={loginRequest.isLoading}
+                            type="submit"
+                        >
+                            Entrar
+                        </Button>
+                    </Stack>
+                </form>
             </Stack>
         </Container>
     )
