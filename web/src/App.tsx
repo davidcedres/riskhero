@@ -3,7 +3,7 @@ import Private from './pages/Private'
 import Public from './pages/Public'
 
 function App() {
-    const [jwt, setJwt] = useLocalStorage({
+    const [jwt] = useLocalStorage({
         key: 'jwt'
     })
 
