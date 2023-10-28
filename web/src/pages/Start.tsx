@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useLocalStorage } from '@mantine/hooks'
+import { User } from '../api/interfaces'
 
 type Form = {
     email: string
@@ -34,17 +35,23 @@ const Start = () => {
     const { handleSubmit, register } = useForm<Form>({
         resolver: yupResolver(schema)
     })
+
     const [, setJwt] = useLocalStorage({
         key: 'jwt'
     })
 
+    const [, setUser] = useLocalStorage({
+        key: 'user'
+    })
+
     const loginRequest = useMutation((data: Form) =>
-        api.post<{ jwt: string }>('/sessions', data)
+        api.post<{ jwt: string; user: User }>('/sessions', data)
     )
 
     const onSubmit = async (data: Form) => {
         const { data: credentials } = await loginRequest.mutateAsync(data)
         setJwt(credentials.jwt)
+        setUser(JSON.stringify(credentials.user))
     }
 
     return (
@@ -62,21 +69,17 @@ const Start = () => {
                     </Anchor>
                 </Flex>
 
-                <form
-                    style={{
-                        alignSelf: 'center'
-                    }}
-                >
+                <form>
                     <Stack
                         style={{
                             borderColor: colors['slate']['100'],
                             borderWidth: 2,
                             borderStyle: 'solid',
-
                             boxShadow: '0px 8px 24px ' + colors['slate']['100']
                         }}
                         gap="xl"
                         p="xl"
+                        maw={512}
                     >
                         <Title order={3}>Iniciar sesión</Title>
 

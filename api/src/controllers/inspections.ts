@@ -118,7 +118,7 @@ inspections.patch(
     async (req: Request<User>, res) => {
         const session = req.auth!
 
-        await prismaClient.inspection.findFirstOrThrow({
+        const inspection = await prismaClient.inspection.update({
             where: {
                 id: Number(req.params.id),
                 area: {
@@ -127,12 +127,6 @@ inspections.patch(
                 inspector: {
                     id: session.id
                 }
-            }
-        })
-
-        const inspection = await prismaClient.inspection.update({
-            where: {
-                id: Number(req.params.id)
             },
             data: {
                 status: req.body.status,

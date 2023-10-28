@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { validateRequest } from 'zod-express-middleware'
 import { User } from '../interfaces.js'
 import { Request } from 'express-jwt'
+import { map, omit } from 'lodash-es'
 
 const prismaClient = new PrismaClient()
 const users = express.Router()
@@ -16,11 +17,14 @@ users.get('/', async (req: Request<User>, res) => {
 
     const users = await prismaClient.user.findMany({
         where: {
-            organizationId: session.organizationId
+            organizationId: session.organizationId,
+            role: 'EMPLOYEE'
         }
     })
 
-    res.json(users)
+    const usersWithoutPassword = map(users, (user) => omit(user, 'password'))
+
+    res.json(usersWithoutPassword)
 })
 
 users.post(
@@ -29,9 +33,7 @@ users.post(
         body: z.object({
             email: z.string().email(),
             password: z.string(),
-            name: z.string(),
-            role: z.literal('EMPLOYEE'),
-            organizationId: z.number()
+            name: z.string()
         })
     }),
     async (req: Request<User>, res) => {
@@ -47,8 +49,8 @@ users.post(
                     Number(process.env.SALT!)
                 ),
                 name: req.body.name,
-                role: req.body.role,
-                organizationId: req.body.organizationId,
+                role: 'EMPLOYEE',
+                organizationId: session.organizationId,
                 updatedAt: new Date()
             }
         })

@@ -1,17 +1,35 @@
+import { SessionContext } from './api/useSession'
+import { useEffect, useState } from 'react'
 import { useLocalStorage } from '@mantine/hooks'
 import Private from './pages/Private'
 import Public from './pages/Public'
 
-function App() {
+const App = () => {
+    const [ready, setReady] = useState(false)
+
     const [jwt] = useLocalStorage({
-        key: 'jwt'
+        key: 'jwt',
+        defaultValue: '_'
     })
 
-    if (jwt === undefined || jwt.length === 0) {
-        return <Public />
-    }
+    const [user] = useLocalStorage({
+        key: 'user',
+        defaultValue: '_'
+    })
 
-    return <Private />
+    useEffect(() => {
+        setReady(true)
+    }, [user, jwt])
+
+    if (ready === false) return null
+
+    if (jwt === '_' || user === '_') return <Public />
+
+    return (
+        <SessionContext.Provider value={JSON.parse(user!)}>
+            <Private />
+        </SessionContext.Provider>
+    )
 }
 
 export default App

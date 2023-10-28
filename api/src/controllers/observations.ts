@@ -12,28 +12,28 @@ observations.get(
     '/',
     validateRequest({
         query: z.object({
-            inspectionId: z.number()
+            inspectionId: z.coerce.number()
         })
     }),
     async (req, res) => {
         // @ts-expect-error
         const session = req.auth! as User
 
-        const inspection = await prismaClient.inspection.findFirstOrThrow({
-            where: {
-                id: req.query.inspectionId
-            },
-            include: {
-                area: true
-            }
-        })
-
-        if (inspection.area.organizationId !== session.organizationId)
-            return res.status(401)
+        console.log(req.query)
 
         const observations = await prismaClient.observation.findMany({
             where: {
-                inspectionId: req.query.inspectionId
+                inspection: {
+                    id: Number(req.query.inspectionId),
+                    area: {
+                        organizationId: session.organizationId
+                    },
+                    ...(session.role === 'EMPLOYEE' && {
+                        inspector: {
+                            id: session.id
+                        }
+                    })
+                }
             },
             include: {
                 category: true,
@@ -65,17 +65,16 @@ observations.post(
     async (req: Request<User>, res) => {
         const session = req.auth!
 
-        if (session.role !== 'EMPLOYEE') return res.status(401)
-
         await prismaClient.inspection.findFirstOrThrow({
             where: {
                 id: req.body.inspectionId,
                 area: {
                     organizationId: session.organizationId
-                }
-            },
-            include: {
-                area: true
+                },
+                inspector: {
+                    id: session.id
+                },
+                status: 'OPEN'
             }
         })
 
@@ -97,28 +96,18 @@ observations.patch(
     async (req: Request<User>, res) => {
         const session = req.auth!
 
-        await prismaClient.observation.findFirstOrThrow({
+        const observation = await prismaClient.observation.update({
             where: {
                 id: Number(req.params.id),
                 inspection: {
                     area: {
                         organizationId: session.organizationId
                     },
-                    status: 'CLOSED'
-                }
-            },
-            include: {
-                inspection: {
-                    include: {
-                        area: true
+                    status: 'CLOSED',
+                    inspector: {
+                        id: session.id
                     }
                 }
-            }
-        })
-
-        const observation = await prismaClient.observation.update({
-            where: {
-                id: Number(req.params.id)
             },
             data: {
                 analysis: req.body.analysis

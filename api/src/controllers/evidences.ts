@@ -25,8 +25,6 @@ const upload = multer({ storage })
 evidences.post('/', upload.single('file'), async (req: Request<User>, res) => {
     const session = req.auth!
 
-    if (session.role !== 'EMPLOYEE') return res.status(401)
-
     if (req.file === undefined) {
         return res.status(400)
     }
@@ -37,13 +35,6 @@ evidences.post('/', upload.single('file'), async (req: Request<User>, res) => {
             inspection: {
                 inspector: {
                     id: session.id
-                }
-            }
-        },
-        include: {
-            inspection: {
-                include: {
-                    inspector: true
                 }
             }
         }

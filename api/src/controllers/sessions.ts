@@ -6,6 +6,7 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 
 import { makeError } from '../makeError.js'
+import { omit } from 'lodash-es'
 
 const prismaClient = new PrismaClient()
 const sessions = express.Router()
@@ -19,19 +20,19 @@ sessions.post(
         })
     }),
     async (req, res) => {
-        const user = await prismaClient.user.findFirst({
+        const user = await prismaClient.user.findFirstOrThrow({
             where: {
                 email: req.body.email
             }
         })
 
-        if (user === null)
-            return res.status(401).json(makeError('Email', 'Not Found'))
-
         if (!compareSync(req.body.password, user.password))
             return res.status(401).json(makeError('Password', 'Incorrect'))
 
-        res.json({ jwt: jwt.sign(user, process.env.SECRET!) })
+        res.json({
+            jwt: jwt.sign(user, process.env.SECRET!),
+            user: omit(user, 'password')
+        })
     }
 )
 

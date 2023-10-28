@@ -16,6 +16,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@fontsource/roboto-condensed": "^5.0.12",
     "@hookform/resolvers": "^3.3.1",
+    "@lottiefiles/react-lottie-player": "^3.5.3",
     "@mantine/core": "^7.1.2",
     "@mantine/dates": "^7.1.2",
     "@mantine/hooks": "^7.1.2",

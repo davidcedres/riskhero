@@ -4,9 +4,18 @@ import {
     Outlet,
     Route,
     Routes,
-    NavLink as RouterLink
+    NavLink as RouterLink,
+    Link
 } from 'react-router-dom'
-import { AppShell, Burger, Container, Flex, NavLink, Text } from '@mantine/core'
+import {
+    Anchor,
+    AppShell,
+    Burger,
+    Container,
+    Flex,
+    NavLink,
+    Text
+} from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import NewInspection from './Inspections/New'
 import Inspections from './Inspections/Main'
@@ -17,8 +26,12 @@ import InspectionDetails from './Inspections/Details'
 import NewReport from './Reports/New'
 import ReportDetails from './Reports/Details'
 import UserButton from '../components/UserButton'
+import NewUser from './Users/New'
+import { FC, useContext } from 'react'
+import { SessionContext } from '../api/useSession'
+import { User } from '../api/interfaces'
 
-const Layout = () => {
+const Layout: FC<{ role: User['role'] }> = ({ role }) => {
     const [opened, { toggle }] = useDisclosure()
     const isPrint = useMediaQuery('print')
 
@@ -37,9 +50,11 @@ const Layout = () => {
                 <Burger opened={opened} onClick={toggle} hiddenFrom="sm" />
 
                 <Flex align="center" justify="space-between">
-                    <Text ff="Oswald Variable" fz={32}>
-                        RISKNINJA
-                    </Text>
+                    <Anchor to="/inspections" component={Link} td="none">
+                        <Text ff="Oswald Variable" fz={32} c="dark">
+                            RISKNINJA
+                        </Text>
+                    </Anchor>
 
                     <UserButton />
                 </Flex>
@@ -60,25 +75,30 @@ const Layout = () => {
                     {
                         to: '/users',
                         icon: IconUsers,
-                        label: 'Usuarios'
+                        label: 'Usuarios',
+                        roles: ['MANAGER']
                     }
-                ].map((link) => (
-                    <RouterLink
-                        to={link.to}
-                        style={{ textDecoration: 'none', color: 'black' }}
-                    >
-                        {({ isActive }) => (
-                            <NavLink
-                                leftSection={
-                                    <link.icon size="1.5rem" stroke={1.5} />
-                                }
-                                label={link.label}
-                                active={isActive}
-                                p="md"
-                            />
-                        )}
-                    </RouterLink>
-                ))}
+                ]
+                    .filter((page) => page.roles?.includes(role) ?? true)
+                    .map((link) => (
+                        <RouterLink
+                            to={link.to}
+                            style={{ textDecoration: 'none', color: 'black' }}
+                            key={link.to}
+                        >
+                            {({ isActive }) => (
+                                <NavLink
+                                    component="span"
+                                    leftSection={
+                                        <link.icon size="1.5rem" stroke={1.5} />
+                                    }
+                                    label={link.label}
+                                    active={isActive}
+                                    p="md"
+                                />
+                            )}
+                        </RouterLink>
+                    ))}
             </AppShell.Navbar>
 
             <AppShell.Main>
@@ -91,10 +111,14 @@ const Layout = () => {
 }
 
 const Private = () => {
+    const session = useContext(SessionContext)
+    const role = session.role
+    const isManager = role === 'MANAGER'
+
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Layout />}>
+                <Route path="/" element={<Layout role={role} />}>
                     <Route index element={<Navigate to="/inspections" />} />
 
                     <Route path="/inspections">
@@ -109,7 +133,12 @@ const Private = () => {
                         <Route path=":id" element={<ReportDetails />} />
                     </Route>
 
-                    <Route path="/users" element={<Users />} />
+                    {isManager && (
+                        <Route path="/users">
+                            <Route index element={<Users />} />
+                            <Route path="new" element={<NewUser />} />
+                        </Route>
+                    )}
 
                     <Route path="*" element={<Navigate to="/inspections" />} />
                 </Route>

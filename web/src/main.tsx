@@ -32,6 +32,7 @@ const queryClient = new QueryClient({
                     return
                 }
 
+                // eslint-disable-next-line no-extra-semi
                 ;(
                     error.response?.data[0].errors.issues as {
                         code: string
@@ -47,7 +48,7 @@ const queryClient = new QueryClient({
 })
 
 const myTheme = createTheme({
-    primaryColor: 'indigo',
+    primaryColor: 'orange',
     defaultRadius: 0,
     fontFamily: 'Roboto, sans-serif',
     fontFamilyMonospace: 'Monaco, Courier, monospace',

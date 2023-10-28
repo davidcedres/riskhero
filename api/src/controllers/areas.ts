@@ -29,19 +29,20 @@ areas.post(
     '/',
     validateRequest({
         body: z.object({
-            name: z.string(),
-            organizationId: z.number()
+            name: z.string()
         })
     }),
     async (req: Request<User>, res) => {
         const session = req.auth!
+
+        console.log(session)
 
         if (session.role !== 'MANAGER') return res.status(401)
 
         const area = await prismaClient.area.create({
             data: {
                 name: req.body.name,
-                organizationId: req.body.organizationId,
+                organizationId: session.organizationId,
                 updatedAt: new Date()
             }
         })

@@ -1,16 +1,20 @@
-import { Badge, Button, Flex, Stack, Text, Title } from "@mantine/core";
-import { useQuery } from "react-query";
-import api from "../../api/api";
-import { User } from "../../api/interfaces";
+import { Badge, Button, Flex, Stack, Text, Title } from '@mantine/core'
+import { useQuery } from 'react-query'
+import api from '../../api/api'
+import { User } from '../../api/interfaces'
+import { Link } from 'react-router-dom'
 
 const Users = () => {
-    const query = useQuery(["FetchUsers"], () => api.get<User[]>("/users"));
+    const query = useQuery(['FetchUsers'], () => api.get<User[]>('/users'))
 
     return (
         <Stack>
             <Flex justify="space-between" mb="lg">
                 <Title>Usuarios</Title>
-                <Button>Nuevo</Button>
+
+                <Button component={Link} to="new">
+                    Nuevo
+                </Button>
             </Flex>
 
             {query.data?.data.map((user) => (
@@ -29,7 +33,7 @@ const Users = () => {
                 </Flex>
             ))}
         </Stack>
-    );
-};
+    )
+}
 
-export default Users;
+export default Users

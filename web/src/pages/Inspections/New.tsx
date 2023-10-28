@@ -1,4 +1,11 @@
-import { Anchor, Button, Select, Stack, Title } from '@mantine/core'
+import {
+    Anchor,
+    Autocomplete,
+    Button,
+    Select,
+    Stack,
+    Title
+} from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { Controller, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -44,6 +51,10 @@ const NewInspection = () => {
             api.post('/inspections', data)
     )
 
+    const createAreaRequest = useMutation((data: { name: string }) =>
+        api.post<Area>('/areas', data)
+    )
+
     const areas = useMemo(
         () => areasRequest.data?.data ?? [],
         [areasRequest.data?.data]
@@ -55,11 +66,21 @@ const NewInspection = () => {
     )
 
     const onSubmit = async (data: Form) => {
+        let area = areas.find((area) => area.name === data.area)
+
+        if (area === undefined) {
+            const response = await createAreaRequest.mutateAsync({
+                name: data.area
+            })
+            area = response.data
+        }
+
         await saveRequest.mutateAsync({
-            ...data,
-            areaId: Number(data.area),
+            areaId: area.id,
             userId: Number(data.inspector),
-            status: 'OPEN'
+            status: 'OPEN',
+            date: data.date,
+            type: data.type
         })
 
         navigate('/', {
@@ -81,7 +102,7 @@ const NewInspection = () => {
                 name="area"
                 control={control}
                 render={({ field }) => (
-                    <Select
+                    <Autocomplete
                         {...field}
                         label="Area"
                         placeholder="Seleccione area a inspeccionar"
@@ -143,7 +164,12 @@ const NewInspection = () => {
                 )}
             />
 
-            <Button onClick={handleSubmit(onSubmit)}>Guardar</Button>
+            <Button
+                onClick={handleSubmit(onSubmit)}
+                loading={createAreaRequest.isLoading || saveRequest.isLoading}
+            >
+                Guardar
+            </Button>
         </Stack>
     )
 }
