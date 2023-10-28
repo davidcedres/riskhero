@@ -1,9 +1,10 @@
-import { PrismaClient } from '@prisma/client'
 import { compareSync } from 'bcrypt'
-import express from 'express'
-import { z } from 'zod'
+import { PrismaClient } from '@prisma/client'
 import { validateRequest } from 'zod-express-middleware'
+import { z } from 'zod'
+import express from 'express'
 import jwt from 'jsonwebtoken'
+
 import { makeError } from '../makeError.js'
 
 const prismaClient = new PrismaClient()

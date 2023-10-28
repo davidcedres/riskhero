@@ -1,6 +1,6 @@
-import { Anchor, Badge, Image, Stack, Text, Title } from "@mantine/core";
-import { useQuery } from "react-query";
-import { Link, useParams } from "react-router-dom";
+import { Anchor, Badge, Image, Stack, Text, Title } from '@mantine/core'
+import { useQuery } from 'react-query'
+import { Link, useParams } from 'react-router-dom'
 import {
     Category,
     Condition,
@@ -8,57 +8,57 @@ import {
     Report,
     State,
     getStateColor,
-    getStateTranslation,
-} from "../../api/interfaces";
-import api from "../../api/api";
-import colors from "../../colors";
-import { useMediaQuery } from "@mantine/hooks";
-import es from "date-fns/locale/es";
-import { format } from "date-fns";
+    getStateTranslation
+} from '../../api/interfaces'
+import api from '../../api/api'
+import colors from '../../colors'
+import { useMediaQuery } from '@mantine/hooks'
+import es from 'date-fns/locale/es'
+import { format } from 'date-fns'
 
 // TODO: this file is extremely similar to New.tsx
 // reuse the right parts via custom hooks
 
 const randomImage =
-    "https://images.unsplash.com/photo-1481349518771-20055b2a7b24?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww";
+    'https://images.unsplash.com/photo-1481349518771-20055b2a7b24?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww'
 
 const ReportDetails = () => {
-    const { id } = useParams();
-    const isPrint = useMediaQuery("print");
+    const { id } = useParams()
+    const isPrint = useMediaQuery('print')
 
-    const reportRequest = useQuery(["FetchReport", id], () =>
-        api.get<Report>("/reports/" + id)
-    );
+    const reportRequest = useQuery(['FetchReport', id], () =>
+        api.get<Report>('/reports/' + id)
+    )
 
-    const ispectionId = reportRequest.data?.data.inspectionId;
+    const ispectionId = reportRequest.data?.data.inspectionId
 
-    const categoriesRequest = useQuery(["FetchCategories"], () =>
+    const categoriesRequest = useQuery(['FetchCategories'], () =>
         api.get<Category[]>(`/categories`)
-    );
+    )
 
     const observationsRequest = useQuery(
-        ["FetchObservations", ispectionId],
+        ['FetchObservations', ispectionId],
         () =>
             api.get<(Observation & { condition: Condition })[]>(
                 `/observations`,
                 {
-                    params: { inspectionId: ispectionId },
+                    params: { inspectionId: ispectionId }
                 }
             ),
         {
-            enabled: Boolean(ispectionId),
+            enabled: Boolean(ispectionId)
         }
-    );
+    )
 
     if (
         reportRequest.data === undefined ||
         observationsRequest.data === undefined ||
         categoriesRequest.data === undefined
     )
-        return null;
+        return null
 
-    const report = reportRequest.data.data;
-    const observations = observationsRequest.data.data;
+    const report = reportRequest.data.data
+    const observations = observationsRequest.data.data
 
     const categoriesWithBadObservations = categoriesRequest.data.data.filter(
         (category) =>
@@ -68,7 +68,7 @@ const ReportDetails = () => {
                         observation.state
                     ) && observation.categoryId === category.id
             ).length > 0
-    );
+    )
 
     return (
         <Stack>
@@ -81,23 +81,23 @@ const ReportDetails = () => {
             <Title>Informe</Title>
 
             <Text>
-                Correspondiente a la inspección de{" "}
+                Correspondiente a la inspección de{' '}
                 <strong>
                     <i>{report.inspection.area.name}</i>
-                </strong>{" "}
-                ejecutada el{" "}
+                </strong>{' '}
+                ejecutada el{' '}
                 <strong>
                     <i>
                         {format(
                             new Date(report.inspection.date),
                             "dd 'de' MMMM 'a las' h:mm bbb",
                             {
-                                locale: es,
+                                locale: es
                             }
                         )}
                     </i>
-                </strong>{" "}
-                por el inspector{" "}
+                </strong>{' '}
+                por el inspector{' '}
                 <strong>
                     <i>{report.inspection.inspector.name}.</i>
                 </strong>
@@ -109,12 +109,12 @@ const ReportDetails = () => {
                         [
                             State.MISSING,
                             State.NEEDS_REPAIR,
-                            State.UNSAFE,
+                            State.UNSAFE
                         ].includes(observation.state) &&
                         observation.categoryId === category.id
-                );
+                )
 
-                if (badObservations.length === 0) return;
+                if (badObservations.length === 0) return
 
                 return (
                     <Stack style={{ borderRadius: 8 }}>
@@ -124,7 +124,7 @@ const ReportDetails = () => {
                                 index === 0
                                     ? undefined
                                     : {
-                                          "page-break-before": "always",
+                                          'page-break-before': 'always'
                                       }
                             }
                         >
@@ -143,7 +143,7 @@ const ReportDetails = () => {
                                         color={
                                             colors[
                                                 getStateColor(observation.state)
-                                            ]["500"]
+                                            ]['500']
                                         }
                                         variant="light"
                                     >
@@ -159,21 +159,21 @@ const ReportDetails = () => {
                                         maw={128}
                                         mah={128}
                                         style={{
-                                            cursor: "pointer",
-                                            borderRadius: 4,
+                                            cursor: 'pointer',
+                                            borderRadius: 4
                                         }}
                                         // onClick={() => setEvidence(true)}
                                     />
 
                                     <Text>{observation.analysis}</Text>
                                 </Stack>
-                            );
+                            )
                         })}
                     </Stack>
-                );
+                )
             })}
         </Stack>
-    );
-};
+    )
+}
 
-export default ReportDetails;
+export default ReportDetails

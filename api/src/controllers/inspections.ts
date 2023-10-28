@@ -9,26 +9,17 @@ const prismaClient = new PrismaClient()
 const inspections = express.Router()
 
 inspections.get('/', async (req: Request<User>, res) => {
-    const { role, organizationId, id } = req.auth!
-
-    const wheres = {
-        MANAGER: {
-            area: {
-                organizationId
-            }
-        },
-        EMPLOYEE: {
-            area: {
-                organizationId
-            },
-            inspector: {
-                id
-            }
-        }
-    }
+    const session = req.auth!
 
     const inspections = await prismaClient.inspection.findMany({
-        where: wheres[role],
+        where: {
+            area: {
+                organizationId: session.organizationId
+            },
+            ...(session.role === 'EMPLOYEE' && {
+                inspector: { id: session.id }
+            })
+        },
         include: {
             area: true,
             inspector: true
@@ -42,11 +33,19 @@ inspections.get('/', async (req: Request<User>, res) => {
 })
 
 inspections.get('/:id', async (req: Request<User>, res) => {
-    const { organizationId } = req.auth!
+    const session = req.auth!
 
     const inspection = await prismaClient.inspection.findFirstOrThrow({
         where: {
-            id: Number(req.params.id)
+            id: Number(req.params.id),
+            area: {
+                organizationId: session.organizationId
+            },
+            ...(session.role === 'EMPLOYEE' && {
+                inspector: {
+                    id: session.id
+                }
+            })
         },
         include: {
             area: true,
@@ -54,12 +53,6 @@ inspections.get('/:id', async (req: Request<User>, res) => {
         }
     })
 
-    // Validation
-    if (inspection.area.organizationId !== organizationId) {
-        return res.status(401)
-    }
-
-    // Proceed
     res.json(inspection)
 })
 
@@ -79,34 +72,34 @@ inspections.post(
         })
     }),
     async (req: Request<User>, res) => {
-        // Validation
-        const { organizationId } = req.auth!
+        const session = req.auth!
 
-        const user = await prismaClient.user.findFirstOrThrow({
+        if (session.role !== 'MANAGER') return res.status(401)
+
+        await prismaClient.organization.findFirstOrThrow({
             where: {
-                id: req.body.userId
+                id: session.organizationId,
+                areas: {
+                    some: {
+                        id: req.body.areaId
+                    }
+                },
+                users: {
+                    some: {
+                        id: req.body.userId,
+                        role: 'EMPLOYEE'
+                    }
+                }
             }
         })
-
-        const area = await prismaClient.area.findFirstOrThrow({
-            where: {
-                id: req.body.areaId
-            }
-        })
-
-        if (user.organizationId !== organizationId) return res.status(401)
-        if (area.organizationId !== organizationId) return res.status(401)
-
-        // Proceed
-        const { areaId, userId, type, date, status } = req.body
 
         const inspection = await prismaClient.inspection.create({
             data: {
-                areaId,
-                userId,
-                type,
-                date,
-                status,
+                areaId: req.body.areaId,
+                userId: req.body.userId,
+                type: req.body.type,
+                date: req.body.date,
+                status: req.body.status,
                 updatedAt: new Date()
             }
         })
@@ -119,22 +112,31 @@ inspections.patch(
     '/:id',
     validateRequest({
         body: z.object({
-            status: z.union([
-                // z.literal("OPEN"),
-                z.literal('CLOSED'),
-                z.literal('DONE')
-            ])
+            status: z.union([z.literal('CLOSED'), z.literal('DONE')])
         })
     }),
     async (req: Request<User>, res) => {
-        const { organizationId } = req.auth!
+        const session = req.auth!
+
+        await prismaClient.inspection.findFirstOrThrow({
+            where: {
+                id: Number(req.params.id),
+                area: {
+                    organizationId: session.organizationId
+                },
+                inspector: {
+                    id: session.id
+                }
+            }
+        })
 
         const inspection = await prismaClient.inspection.update({
             where: {
                 id: Number(req.params.id)
             },
             data: {
-                status: req.body.status
+                status: req.body.status,
+                updatedAt: new Date()
             }
         })
 

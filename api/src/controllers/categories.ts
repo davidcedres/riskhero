@@ -1,17 +1,19 @@
-import { PrismaClient } from "@prisma/client";
-import express from "express";
+import { PrismaClient } from '@prisma/client'
+import express from 'express'
 
-const prismaClient = new PrismaClient();
-const categories = express.Router();
+const prismaClient = new PrismaClient()
+const categories = express.Router()
 
-categories.get("/", async (req, res) => {
+// this is a sistem resource, not owned by a particular entity
+// everybody should be able to access it
+categories.get('/', async (req, res) => {
     const categories = await prismaClient.category.findMany({
         include: {
-            conditions: true,
-        },
-    });
+            conditions: true
+        }
+    })
 
-    res.json(categories);
-});
+    res.json(categories)
+})
 
-export default categories;
+export default categories
