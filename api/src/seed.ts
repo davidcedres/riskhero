@@ -23,62 +23,6 @@ await prisma.user.create({
     }
 })
 
-await prisma.user.create({
-    data: {
-        email: 'luisa@riskninja.io',
-        name: 'Luisa Martinez',
-        role: 'EMPLOYEE',
-        organizationId: organization.id,
-        password: hashSync('Password.1', Number(process.env.SALT!)),
-        updatedAt: new Date()
-    }
-})
-
-await prisma.area.createMany({
-    data: [
-        {
-            name: 'Pista de Atletismo, Hechicera',
-            organizationId: organization.id,
-            updatedAt: new Date()
-        },
-        {
-            name: 'Cancha de Baloncesto, Hechicera',
-            organizationId: organization.id,
-            updatedAt: new Date()
-        },
-        {
-            name: 'Laboratorio de Quimica, Facultad de Ciencias',
-            organizationId: organization.id,
-            updatedAt: new Date()
-        },
-        {
-            name: 'Laboratorio de Fisica, Facultad de Ciencias',
-            organizationId: organization.id,
-            updatedAt: new Date()
-        },
-        {
-            name: 'Laboratorio de Suelos',
-            organizationId: organization.id,
-            updatedAt: new Date()
-        },
-        {
-            name: 'Aserradero, Santa Rosa',
-            organizationId: organization.id,
-            updatedAt: new Date()
-        },
-        {
-            name: 'Nucleo Universitario Alberto Adriani',
-            organizationId: organization.id,
-            updatedAt: new Date()
-        },
-        {
-            name: 'Laboratorio de Audicion, Facultad de Idiomas',
-            organizationId: organization.id,
-            updatedAt: new Date()
-        }
-    ]
-})
-
 const baseEntities = [
     {
         category: 'Piso',

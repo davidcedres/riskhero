@@ -1,8 +1,8 @@
-import { Avatar, Group, Menu, Text, rem } from '@mantine/core'
+import { Group, Menu, Text, rem } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 import { IconChevronDown, IconLogout } from '@tabler/icons-react'
 import { useContext } from 'react'
-import { SessionContext } from '../api/useSession'
+import { SessionContext } from '../utils/useSession'
 
 const UserButton = () => {
     const session = useContext(SessionContext)
@@ -24,7 +24,6 @@ const UserButton = () => {
         <Menu shadow="md" width={200}>
             <Menu.Target>
                 <Group style={{ cursor: 'pointer' }}>
-                    <Avatar />
                     <Text style={{ userSelect: 'none' }}>{session.name}</Text>
                     <IconChevronDown size={14} />
                 </Group>

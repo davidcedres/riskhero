@@ -7,7 +7,8 @@ import {
     Stack,
     Table,
     Text,
-    Title
+    Title,
+    Tooltip
 } from '@mantine/core'
 import { format } from 'date-fns'
 import { Link, useNavigate } from 'react-router-dom'
@@ -16,7 +17,9 @@ import api from '../../api/api'
 import es from 'date-fns/locale/es'
 import Relaxed from '../../components/Relaxed'
 import { useContext } from 'react'
-import { SessionContext } from '../../api/useSession'
+import { SessionContext } from '../../utils/useSession'
+import { findColor } from '../../utils/findColor'
+import { truncate } from 'lodash'
 
 const Inspections = () => {
     const session = useContext(SessionContext)
@@ -78,7 +81,9 @@ const Inspections = () => {
                 style={{ cursor: 'pointer' }}
             >
                 <Table.Td>
-                    <Text>{inspection.area.name}</Text>
+                    <Tooltip label={inspection.area.name} position="top-start">
+                        <Text>{truncate(inspection.area.name)}</Text>
+                    </Tooltip>
                 </Table.Td>
                 <Table.Td>
                     <Badge variant="light">
@@ -93,12 +98,18 @@ const Inspections = () => {
                     </Flex>
                 </Table.Td>
                 <Table.Td>
-                    <Badge color="green" variant="light">
+                    <Badge
+                        color={findColor(typeMap[inspection.type])}
+                        variant="light"
+                    >
                         {typeMap[inspection.type]}
                     </Badge>
                 </Table.Td>
                 <Table.Td>
-                    <Badge color="orange" variant="light">
+                    <Badge
+                        color={findColor(actionMap[inspection.status].label)}
+                        variant="light"
+                    >
                         {actionMap[inspection.status].label}
                     </Badge>
                 </Table.Td>

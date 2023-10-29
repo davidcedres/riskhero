@@ -28,7 +28,7 @@ import ReportDetails from './Reports/Details'
 import UserButton from '../components/UserButton'
 import NewUser from './Users/New'
 import { FC, useContext } from 'react'
-import { SessionContext } from '../api/useSession'
+import { SessionContext } from '../utils/useSession'
 import { User } from '../api/interfaces'
 
 const Layout: FC<{ role: User['role'] }> = ({ role }) => {
@@ -51,7 +51,7 @@ const Layout: FC<{ role: User['role'] }> = ({ role }) => {
 
                 <Flex align="center" justify="space-between">
                     <Anchor to="/inspections" component={Link} td="none">
-                        <Text ff="Oswald Variable" fz={32} c="dark">
+                        <Text ff="Oswald Variable" fw="500" fz={32} c="dark">
                             RISKNINJA
                         </Text>
                     </Anchor>

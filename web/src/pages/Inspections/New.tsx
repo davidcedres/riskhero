@@ -2,6 +2,8 @@ import {
     Anchor,
     Autocomplete,
     Button,
+    InputLabel,
+    SegmentedControl,
     Select,
     Stack,
     Title
@@ -44,7 +46,11 @@ const NewInspection = () => {
         api.get<Area[]>('/areas')
     )
     const usersRequest = useQuery(['FetchUsers'], () =>
-        api.get<User[]>('/users')
+        api.get<User[]>('/users', {
+            params: {
+                role: 'EMPLOYEE'
+            }
+        })
     )
     const saveRequest = useMutation(
         (data: Omit<Inspection, 'id' | 'observations'>) =>
@@ -134,21 +140,16 @@ const NewInspection = () => {
                 name="type"
                 control={control}
                 render={({ field }) => (
-                    <Select
-                        {...field}
-                        label="Tipo"
-                        placeholder="Tipo de inspección"
-                        data={[
-                            {
-                                value: 'ANNOUNCED',
-                                label: 'Anunciada'
-                            },
-                            {
-                                value: 'UNANNOUNCED',
-                                label: 'No Anunciada'
-                            }
-                        ]}
-                    />
+                    <Stack gap={1}>
+                        <InputLabel>Tipo de inspección</InputLabel>
+                        <SegmentedControl
+                            {...field}
+                            data={[
+                                { label: 'Anunciada', value: 'ANNOUNCED' },
+                                { label: 'No Anunciada', value: 'UNANNOUNCED' }
+                            ]}
+                        />
+                    </Stack>
                 )}
             />
 

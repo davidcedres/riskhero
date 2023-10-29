@@ -8,7 +8,7 @@ import api from '../../api/api'
 import es from 'date-fns/locale/es'
 import Relaxed from '../../components/Relaxed'
 import { useContext } from 'react'
-import { SessionContext } from '../../api/useSession'
+import { SessionContext } from '../../utils/useSession'
 
 const Reports = () => {
     // hooks
@@ -20,9 +20,7 @@ const Reports = () => {
         api.get<Report[]>('/reports')
     )
 
-    if (query.data === undefined) return null
-
-    const reports = query.data.data
+    const reports = query.data?.data ?? []
 
     const emptyMessage =
         session.role === 'EMPLOYEE'

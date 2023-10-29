@@ -15,6 +15,7 @@ import colors from '../../colors'
 import { useMediaQuery } from '@mantine/hooks'
 import es from 'date-fns/locale/es'
 import { format } from 'date-fns'
+import ula from '../../assets/ula-logo.png'
 
 // TODO: this file is extremely similar to New.tsx
 // reuse the right parts via custom hooks
@@ -77,6 +78,8 @@ const ReportDetails = () => {
                     ← Reportes
                 </Anchor>
             )}
+
+            <Image src={ula} w={256} />
 
             <Title>Informe</Title>
 

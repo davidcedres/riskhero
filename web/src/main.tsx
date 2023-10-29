@@ -48,7 +48,7 @@ const queryClient = new QueryClient({
 })
 
 const myTheme = createTheme({
-    primaryColor: 'orange',
+    primaryColor: 'violet',
     defaultRadius: 0,
     fontFamily: 'Roboto, sans-serif',
     fontFamilyMonospace: 'Monaco, Courier, monospace',

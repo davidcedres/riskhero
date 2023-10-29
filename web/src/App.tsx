@@ -1,4 +1,4 @@
-import { SessionContext } from './api/useSession'
+import { SessionContext } from './utils/useSession'
 import { useEffect, useState } from 'react'
 import { useLocalStorage } from '@mantine/hooks'
 import Private from './pages/Private'
