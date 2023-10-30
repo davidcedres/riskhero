@@ -51,7 +51,7 @@ const Layout: FC<{ role: User['role'] }> = ({ role }) => {
 
                 <Flex align="center" justify="space-between">
                     <Anchor to="/inspections" component={Link} td="none">
-                        <Text ff="Oswald Variable" fw="500" fz={32} c="dark">
+                        <Text ff="Oswald Variable" fz={32} c="dark">
                             RISKNINJA
                         </Text>
                     </Anchor>

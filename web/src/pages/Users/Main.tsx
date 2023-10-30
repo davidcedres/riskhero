@@ -42,7 +42,7 @@ const Users = () => {
 
                 <Table.Tbody>
                     {users.map((user) => (
-                        <Table.Tr key={user.id} style={{ cursor: 'pointer' }}>
+                        <Table.Tr key={user.id}>
                             <Table.Td>
                                 <Text>{user.name}</Text>
                             </Table.Td>

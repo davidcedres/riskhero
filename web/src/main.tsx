@@ -6,7 +6,6 @@ import '@fontsource-variable/oswald'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { MantineProvider, createTheme } from '@mantine/core'
-import { ClerkProvider } from '@clerk/clerk-react'
 
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
@@ -16,12 +15,6 @@ import toast, { Toaster } from 'react-hot-toast'
 import { startCase } from 'lodash'
 
 import App from './App.tsx'
-
-if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
-    throw new Error('Missing Publishable Key')
-}
-
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -48,7 +41,7 @@ const queryClient = new QueryClient({
 })
 
 const myTheme = createTheme({
-    primaryColor: 'violet',
+    primaryColor: 'orange',
     defaultRadius: 0,
     fontFamily: 'Roboto, sans-serif',
     fontFamilyMonospace: 'Monaco, Courier, monospace',
@@ -59,9 +52,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <MantineProvider theme={myTheme}>
-                <ClerkProvider publishableKey={clerkPubKey}>
-                    <App />
-                </ClerkProvider>
+                <App />
             </MantineProvider>
         </QueryClientProvider>
         <Toaster position="bottom-center" />

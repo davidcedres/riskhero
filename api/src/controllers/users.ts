@@ -78,7 +78,7 @@ users.post(
             from: 'david@riskninja.io',
             to: user.email,
             subject: 'Bienvenido a Riskninja',
-            html: `<p>Has sido invitado a formar parte de la organización ${organization.name}. <br><br>Para continuar, <a href="https://riskninja.io/start">haz click aquí</a></p>`
+            html: `<p>Has sido invitado a formar parte de la organización ${organization.name}. <br><br>Para continuar, <a href="https://riskninja.io/start">haz click aquí.</a></p>`
         })
 
         res.json(user)

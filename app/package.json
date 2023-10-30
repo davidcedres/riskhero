@@ -40,7 +40,8 @@
     "zod": "^3.22.2",
     "zustand": "^4.4.1",
     "@react-native-community/netinfo": "9.3.10",
-    "expo-file-system": "~15.4.4"
+    "expo-file-system": "~15.4.4",
+    "lottie-react-native": "5.1.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

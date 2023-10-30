@@ -63,7 +63,7 @@ const Start = () => {
                         to="/"
                         style={{ textDecoration: 'none' }}
                     >
-                        <Text ff="Oswald Variable" fz={32}>
+                        <Text ff="Oswald Variable" fz={32} c="dark">
                             RISKNINJA
                         </Text>
                     </Anchor>

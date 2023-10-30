@@ -5,12 +5,12 @@ import { useState } from 'react'
 import { useStore } from '../state/store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import api from '../api'
+import api from '../api/api'
 import Button from '../components/Button'
 import Input from '../components/Input'
-import sync from '../state/sync'
 import Typography from '../components/Typography'
 import VStack from '../components/VStack'
+import { User } from '../state/interfaces'
 
 const schema = z.object({
     email: z.string().min(1, { message: 'Required' }),
@@ -25,31 +25,27 @@ type Form = {
 const Signin = () => {
     const { setAuth } = useStore()
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(false)
-
     const { control, handleSubmit } = useForm<Form>({
         resolver: zodResolver(schema)
     })
 
     const handleLogin = async (payload: Form) => {
         try {
-            setError(false)
             setLoading(true)
 
-            const response = await api.post<string>('/sessions', payload)
-            setAuth(response.data)
-            sync()
-
-            router.replace('/inspections')
+            const response = await api.post<{ jwt: string; user: User }>(
+                '/sessions',
+                payload
+            )
+            setAuth(response.data.jwt)
+            router.replace('/sync')
         } catch (error) {
-            setError(true)
             setLoading(false)
         }
     }
 
     const handleError = () => {
         setLoading(false)
-        setError(true)
     }
 
     return (

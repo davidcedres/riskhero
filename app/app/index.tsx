@@ -1,9 +1,16 @@
-import { Redirect } from "expo-router";
-import { useStore } from "../state/store";
+import { Redirect } from 'expo-router'
+import { useState } from 'react'
+import { useStore } from '../state/store'
 
 export default () => {
-    const logged = useStore((store) => store.auth.logged);
+    const [hydrating, setHydrating] = useState(false)
+    const auth = useStore((store) => store.auth)
 
-    if (logged) return <Redirect href="/inspections" />;
-    return <Redirect href="/sign-in" />;
-};
+    useStore.persist.onFinishHydration(() => {
+        setHydrating(true)
+    })
+
+    if (hydrating === false) return null
+    if (auth.logged) return <Redirect href="/inspections" />
+    return <Redirect href="/sign-in" />
+}

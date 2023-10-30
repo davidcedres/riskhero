@@ -10,6 +10,7 @@ const Chip: FC<{ label: string; active: boolean }> = ({ label, active }) => (
                 ? { backgroundColor: palette.main }
                 : {
                       borderWidth: 1,
+                      borderColor: palette.main
                   }
         )}
     >
@@ -22,15 +23,15 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 16,
         alignSelf: 'flex-start',
-        borderRadius: 16,
+        borderRadius: 16
     },
     active: {
-        color: 'white',
+        color: 'white'
     },
     inactive: {
         color: palette.main,
-        borderColor: palette.main,
-    },
+        borderColor: palette.main
+    }
 })
 
 export default Chip

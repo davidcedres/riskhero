@@ -1,4 +1,3 @@
-import { SignInButton } from '@clerk/clerk-react'
 import {
     Anchor,
     Box,
@@ -24,12 +23,12 @@ const Landing = () => {
             <Stack pb={256} gap={256}>
                 <Flex py="lg" align="center" justify="space-between">
                     <Anchor style={{ textDecoration: 'none' }}>
-                        <Text ff="Oswald Variable" fz={32}>
+                        <Text ff="Oswald Variable" fz={32} c="dark">
                             RISKNINJA
                         </Text>
                     </Anchor>
 
-                    <Button component={Link} to="/start" variant="transparent">
+                    <Button component={Link} to="/start" variant="light">
                         Iniciar sesión
                     </Button>
                 </Flex>
@@ -47,11 +46,13 @@ const Landing = () => {
                         tiempo y recursos valiosos.
                     </Text>
 
-                    <SignInButton>
-                        <Button style={{ alignSelf: 'flex-end' }}>
-                            Comienza Ahora
-                        </Button>
-                    </SignInButton>
+                    <Button
+                        component={Link}
+                        to="/start"
+                        style={{ alignSelf: 'flex-end' }}
+                    >
+                        Comienza Ahora
+                    </Button>
                 </Stack>
 
                 <Stack gap="xl">
@@ -166,9 +167,9 @@ const Landing = () => {
                 >
                     <Title order={1}>¿Está listo para probar Risk Ninja?</Title>
 
-                    <SignInButton>
-                        <Button>Registrarse</Button>
-                    </SignInButton>
+                    <Button component={Link} to="/start">
+                        Registrarse
+                    </Button>
                 </Stack>
             </Stack>
         </Container>
