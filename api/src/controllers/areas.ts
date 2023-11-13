@@ -2,8 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { Request } from 'express-jwt'
 import { User } from '../interfaces.js'
 import express from 'express'
-import { validateRequest } from 'zod-express-middleware'
-import { z } from 'zod'
+// import { z } from 'zod'
 
 const prismaClient = new PrismaClient()
 const areas = express.Router()
@@ -27,11 +26,11 @@ areas.get('/', async (req: Request<User>, res) => {
 
 areas.post(
     '/',
-    validateRequest({
-        body: z.object({
-            name: z.string()
-        })
-    }),
+    // validateRequest({
+    //     body: z.object({
+    //         name: z.string()
+    //     })
+    // }),
     async (req: Request<User>, res) => {
         const session = req.auth!
 

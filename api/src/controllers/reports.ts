@@ -2,20 +2,9 @@ import { PrismaClient } from '@prisma/client'
 import express from 'express'
 import { Request } from 'express-jwt'
 import { User } from '../interfaces.js'
-import { validateRequest } from 'zod-express-middleware'
-import { z } from 'zod'
 import puppeteer from 'puppeteer'
-import { s3 } from '../s3.js'
+import { minioClient, s3 } from '../s3.js'
 import { nanoid } from 'nanoid'
-import { Client as MinioClient } from 'minio'
-
-const minioClient = new MinioClient({
-    endPoint: 'files.riskninja.io',
-    port: 443,
-    useSSL: true,
-    accessKey: process.env.MINIO_ACCESS_KEY_ID!,
-    secretKey: process.env.MINIO_SECRET_ACCESS_KEY!
-})
 
 const prismaClient = new PrismaClient()
 const reports = express.Router()
@@ -85,12 +74,12 @@ reports.get('/:id', async (req: Request<User>, res) => {
 
 reports.post(
     '/',
-    validateRequest({
-        body: z.object({
-            inspectionId: z.number(),
-            conclusion: z.string()
-        })
-    }),
+    // validateRequest({
+    //     body: z.object({
+    //         inspectionId: z.number(),
+    //         conclusion: z.string()
+    //     })
+    // }),
     async (req: Request<User>, res) => {
         const session = req.auth!
         if (session.role !== 'EMPLOYEE') return res.status(401)

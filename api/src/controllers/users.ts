@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
-import { z } from 'zod'
-import { validateRequest } from 'zod-express-middleware'
+// import { validateRequest } from 'zod-express-middleware'
 import { User } from '../interfaces.js'
 import { Request } from 'express-jwt'
 import { map, omit } from 'lodash-es'
@@ -18,11 +17,11 @@ const users = express.Router()
 
 users.get(
     '/',
-    validateRequest({
-        query: z.object({
-            role: z.literal('EMPLOYEE').optional()
-        })
-    }),
+    // validateRequest({
+    //     query: z.object({
+    //         role: z.literal('EMPLOYEE').optional()
+    //     })
+    // }),
     async (req: Request<User>, res) => {
         const session = req.auth!
 
@@ -45,12 +44,12 @@ users.get(
 
 users.post(
     '/',
-    validateRequest({
-        body: z.object({
-            email: z.string().email(),
-            name: z.string()
-        })
-    }),
+    // validateRequest({
+    //     body: z.object({
+    //         email: z.string().email(),
+    //         name: z.string()
+    //     })
+    // }),
     async (req: Request<User>, res) => {
         const session = req.auth!
 
@@ -90,11 +89,11 @@ users.post(
 
 users.patch(
     '/me',
-    validateRequest({
-        body: z.object({
-            password: z.string()
-        })
-    }),
+    // validateRequest({
+    //     body: z.object({
+    //         password: z.string()
+    //     })
+    // }),
     async (req: Request<User>, res) => {
         const session = req.auth!
 

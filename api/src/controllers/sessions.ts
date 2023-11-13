@@ -1,7 +1,6 @@
 import { compareSync } from 'bcrypt'
 import { PrismaClient } from '@prisma/client'
-import { validateRequest } from 'zod-express-middleware'
-import { z } from 'zod'
+// import { validateRequest } from 'zod-express-middleware'
 import express from 'express'
 import jwt from 'jsonwebtoken'
 
@@ -13,12 +12,12 @@ const sessions = express.Router()
 
 sessions.post(
     '/',
-    validateRequest({
-        body: z.object({
-            email: z.string().email(),
-            password: z.string()
-        })
-    }),
+    // validateRequest({
+    //     body: z.object({
+    //         email: z.string().email(),
+    //         password: z.string()
+    //     })
+    // }),
     async (req, res) => {
         const user = await prismaClient.user.findFirstOrThrow({
             where: {

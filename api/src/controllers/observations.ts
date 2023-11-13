@@ -1,8 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
 import { Request } from 'express-jwt'
-import { z } from 'zod'
-import { validateRequest } from 'zod-express-middleware'
+// import { validateRequest } from 'zod-express-middleware'
 import { User } from '../interfaces.js'
 
 const prismaClient = new PrismaClient()
@@ -10,17 +9,16 @@ const observations = express.Router()
 
 observations.get(
     '/',
-    validateRequest({
-        query: z.object({
-            inspectionId: z.coerce.number(),
-            state: z
-                .union([z.literal('GOOD_ONES'), z.literal('BAD_ONES')])
-                .optional()
-        })
-    }),
-    async (req, res) => {
-        // @ts-expect-error
-        const session = req.auth! as User
+    // validateRequest({
+    //     query: z.object({
+    //         inspectionId: z.coerce.number(),
+    //         state: z
+    //             .union([z.literal('GOOD_ONES'), z.literal('BAD_ONES')])
+    //             .optional()
+    //     })
+    // }),
+    async (req: Request<User>, res) => {
+        const session = req.auth!
 
         const observations = await prismaClient.observation.findMany({
             where: {
@@ -56,21 +54,21 @@ observations.get(
 
 observations.post(
     '/',
-    validateRequest({
-        body: z.object({
-            state: z.union([
-                z.literal('ACCEPTABLE'),
-                z.literal('UNSAFE'),
-                z.literal('MISSING'),
-                z.literal('NEEDS_REPAIR'),
-                z.literal('SKIPPED')
-            ]),
-            description: z.string(),
-            inspectionId: z.number(),
-            categoryId: z.number(),
-            conditionId: z.number()
-        })
-    }),
+    // validateRequest({
+    //     body: z.object({
+    //         state: z.union([
+    //             z.literal('ACCEPTABLE'),
+    //             z.literal('UNSAFE'),
+    //             z.literal('MISSING'),
+    //             z.literal('NEEDS_REPAIR'),
+    //             z.literal('SKIPPED')
+    //         ]),
+    //         description: z.string(),
+    //         inspectionId: z.number(),
+    //         categoryId: z.number(),
+    //         conditionId: z.number()
+    //     })
+    // }),
     async (req: Request<User>, res) => {
         const session = req.auth!
 
@@ -97,11 +95,11 @@ observations.post(
 
 observations.patch(
     '/:id',
-    validateRequest({
-        body: z.object({
-            analysis: z.string()
-        })
-    }),
+    // validateRequest({
+    //     body: z.object({
+    //         analysis: z.string()
+    //     })
+    // }),
     async (req: Request<User>, res) => {
         const session = req.auth!
 
