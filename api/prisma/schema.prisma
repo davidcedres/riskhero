@@ -69,6 +69,7 @@ model Observation {
 
 model Report {
     id           Int        @id @default(autoincrement())
+    url          String?
     inspection   Inspection @relation(fields: [inspectionId], references: [id])
     inspectionId Int        @unique
     conclusion   String

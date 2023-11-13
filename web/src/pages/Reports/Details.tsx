@@ -105,7 +105,7 @@ const ReportDetails = () => {
                 </strong>
             </Text>
 
-            {categoriesWithBadObservations.map((category, index) => {
+            {categoriesWithBadObservations.map((category) => {
                 const categoryObservations = observations.filter(
                     (observation) => observation.categoryId === category.id
                 )
@@ -147,7 +147,7 @@ const ReportDetails = () => {
                                             cursor: 'pointer',
                                             borderRadius: 4
                                         }}
-                                        onClick={() => setEvidence(true)}
+                                        // onClick={() => setEvidence(true)}
                                     />
 
                                     <Text>{observation.analysis}</Text>

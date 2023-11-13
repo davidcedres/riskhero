@@ -1,10 +1,21 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
 import { Request } from 'express-jwt'
-import { merge } from 'lodash-es'
 import { User } from '../interfaces.js'
 import { validateRequest } from 'zod-express-middleware'
 import { z } from 'zod'
+import puppeteer from 'puppeteer'
+import { s3 } from '../s3.js'
+import { nanoid } from 'nanoid'
+import { Client as MinioClient } from 'minio'
+
+const minioClient = new MinioClient({
+    endPoint: 'files.riskninja.io',
+    port: 443,
+    useSSL: true,
+    accessKey: process.env.MINIO_ACCESS_KEY_ID!,
+    secretKey: process.env.MINIO_SECRET_ACCESS_KEY!
+})
 
 const prismaClient = new PrismaClient()
 const reports = express.Router()
@@ -82,7 +93,6 @@ reports.post(
     }),
     async (req: Request<User>, res) => {
         const session = req.auth!
-
         if (session.role !== 'EMPLOYEE') return res.status(401)
 
         await prismaClient.inspection.findFirstOrThrow({
@@ -105,6 +115,37 @@ reports.post(
                 inspectionId: req.body.inspectionId,
                 conclusion: req.body.conclusion,
                 createdAt: new Date()
+            }
+        })
+
+        const browser = await puppeteer.connect({
+            browserWSEndpoint:
+                'wss://chrome.browserless.io?token=65d1263e-b3e4-4864-a7a6-f9f9ec247d55'
+        })
+
+        const page = await browser.newPage()
+        await page.goto('https://riskninja.io/start')
+        await page.type('input[type="email"]', 'admin@riskninja.io')
+        await page.type('input[type="password"]', 'Password.123')
+        await page.goto('https://riskninja.io/reports/' + report.id, {
+            waitUntil: 'networkidle0'
+        })
+        const pdf = await page.pdf()
+
+        const key = `${nanoid()}.pdf`
+        await s3.putObject({
+            Bucket: 'reports',
+            Key: key,
+            Body: pdf,
+            ContentType: 'application/pdf'
+        })
+
+        await prismaClient.report.update({
+            where: {
+                id: report.id
+            },
+            data: {
+                url: await minioClient.presignedGetObject('reports', key)
             }
         })
 
