@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client'
-import { Request } from 'express-jwt'
-import { fileUpload, minioClient } from '../s3.js'
-import { User } from '../interfaces.js'
 import express from 'express'
+import { Request } from 'express-jwt'
+
+import { User } from '../interfaces.js'
+import { fileUpload, minioClient } from '../s3.js'
 
 const prismaClient = new PrismaClient()
 const evidences = express.Router()

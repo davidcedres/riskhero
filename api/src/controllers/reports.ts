@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
 import { Request } from 'express-jwt'
-import { User } from '../interfaces.js'
-import puppeteer from 'puppeteer'
-import { minioClient, s3 } from '../s3.js'
 import { nanoid } from 'nanoid'
+import puppeteer from 'puppeteer'
+
+import { User } from '../interfaces.js'
+import { minioClient, s3 } from '../s3.js'
 
 const prismaClient = new PrismaClient()
 const reports = express.Router()

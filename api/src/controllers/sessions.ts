@@ -1,11 +1,11 @@
-import { compareSync } from 'bcrypt'
 import { PrismaClient } from '@prisma/client'
+import { compareSync } from 'bcrypt'
 // import { validateRequest } from 'zod-express-middleware'
 import express from 'express'
 import jwt from 'jsonwebtoken'
+import { omit } from 'lodash-es'
 
 import { makeError } from '../makeError.js'
-import { omit } from 'lodash-es'
 
 const prismaClient = new PrismaClient()
 const sessions = express.Router()

@@ -1,16 +1,17 @@
-import areas from './controllers/areas.js'
-import categories from './controllers/categories.js'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import evidences from './controllers/evidences.js'
 import express, { Express } from 'express'
-import inspections from './controllers/inspections.js'
+import { expressjwt as jwt } from 'express-jwt'
 import morgan from 'morgan'
+
+import areas from './controllers/areas.js'
+import categories from './controllers/categories.js'
+import evidences from './controllers/evidences.js'
+import inspections from './controllers/inspections.js'
 import observations from './controllers/observations.js'
 import reports from './controllers/reports.js'
 import sessions from './controllers/sessions.js'
 import users from './controllers/users.js'
-import { expressjwt as jwt } from 'express-jwt'
 
 dotenv.config()
 

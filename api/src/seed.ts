@@ -1,6 +1,6 @@
-import dotenv from 'dotenv'
 import { PrismaClient } from '@prisma/client'
 import { hashSync } from 'bcrypt'
+import dotenv from 'dotenv'
 
 dotenv.config()
 

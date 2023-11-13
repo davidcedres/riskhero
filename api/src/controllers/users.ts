@@ -1,14 +1,15 @@
 import { PrismaClient } from '@prisma/client'
+import { hashSync } from 'bcrypt'
 import express from 'express'
+import { Request } from 'express-jwt'
+import jwt from 'jsonwebtoken'
+import { map, omit } from 'lodash-es'
+import { nanoid } from 'nanoid'
+import { Resend } from 'resend'
+
 // import { validateRequest } from 'zod-express-middleware'
 import { User } from '../interfaces.js'
-import { Request } from 'express-jwt'
-import { map, omit } from 'lodash-es'
-import { Resend } from 'resend'
-import jwt from 'jsonwebtoken'
-import { nanoid } from 'nanoid'
 import { FRONTEND_URL } from '../utils.js'
-import { hashSync } from 'bcrypt'
 
 const resend = new Resend(process.env.RESEND_SECRET_KEY!)
 

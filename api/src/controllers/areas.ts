@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client'
-import { Request } from 'express-jwt'
-import { User } from '../interfaces.js'
 import express from 'express'
+import { Request } from 'express-jwt'
+
+import { User } from '../interfaces.js'
 // import { z } from 'zod'
 
 const prismaClient = new PrismaClient()

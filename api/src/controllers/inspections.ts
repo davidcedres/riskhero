@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 // import { validateRequest } from 'zod-express-middleware'
 import express from 'express'
 import { Request } from 'express-jwt'
+
 import { User } from '../interfaces.js'
 
 const prismaClient = new PrismaClient()

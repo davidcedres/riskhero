@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
 import { Request } from 'express-jwt'
+
 // import { validateRequest } from 'zod-express-middleware'
 import { User } from '../interfaces.js'
 
