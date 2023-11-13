@@ -15,9 +15,11 @@ reports.get('/', async (req: Request<User>, res) => {
     const reports = await prismaClient.report.findMany({
         where: {
             inspection: {
-                area: {
-                    organizationId: session.organizationId
-                },
+                ...(session.role !== 'ADMIN' && {
+                    area: {
+                        organizationId: session.organizationId
+                    }
+                }),
                 ...(session.role === 'EMPLOYEE' && {
                     inspector: {
                         id: session.id
@@ -45,9 +47,11 @@ reports.get('/:id', async (req: Request<User>, res) => {
         where: {
             id: Number(req.params.id),
             inspection: {
-                area: {
-                    organizationId: session.organizationId
-                },
+                ...(session.role !== 'ADMIN' && {
+                    area: {
+                        organizationId: session.organizationId
+                    }
+                }),
                 ...(session.role === 'EMPLOYEE' && {
                     inspector: {
                         id: session.id

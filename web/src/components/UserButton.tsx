@@ -1,4 +1,4 @@
-import { Group, Menu, Text, rem } from '@mantine/core'
+import { Group, Menu, Stack, Text, rem } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 import { IconChevronDown, IconLogout } from '@tabler/icons-react'
 import { useContext } from 'react'
@@ -24,7 +24,12 @@ const UserButton = () => {
         <Menu shadow="md" width={200}>
             <Menu.Target>
                 <Group style={{ cursor: 'pointer' }}>
-                    <Text style={{ userSelect: 'none' }}>{session.name}</Text>
+                    <Stack gap="0" style={{ userSelect: 'none' }}>
+                        <Text>{session.name}</Text>
+                        <Text fz="xs" c="gray">
+                            {session.email}
+                        </Text>
+                    </Stack>
                     <IconChevronDown size={14} />
                 </Group>
             </Menu.Target>

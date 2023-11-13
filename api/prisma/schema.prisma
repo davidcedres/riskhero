@@ -15,14 +15,14 @@ model Organization {
 }
 
 model User {
-    id             Int          @id @default(autoincrement())
-    email          String       @unique
+    id             Int           @id @default(autoincrement())
+    email          String        @unique
     password       String
     name           String
     role           Role
-    organization   Organization @relation(fields: [organizationId], references: [id])
+    organization   Organization? @relation(fields: [organizationId], references: [id])
     inspections    Inspection[]
-    organizationId Int
+    organizationId Int?
     updatedAt      DateTime
 }
 
@@ -94,6 +94,7 @@ model Condition {
 model Evidence {
     id            Int         @id @default(autoincrement())
     key           String
+    url           String
     observation   Observation @relation(fields: [observationId], references: [id])
     observationId Int
     updatedAt     DateTime
@@ -102,6 +103,7 @@ model Evidence {
 enum Role {
     MANAGER
     EMPLOYEE
+    ADMIN
 }
 
 enum Type {

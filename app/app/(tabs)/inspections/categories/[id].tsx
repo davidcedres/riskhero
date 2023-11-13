@@ -1,24 +1,24 @@
-import { every, keyBy, values } from "lodash";
-import { Link, router, useLocalSearchParams } from "expo-router";
-import { ScrollView, TouchableOpacity } from "react-native";
-import { State } from "../../../../state/interfaces";
-import { useMemo } from "react";
-import { useStore } from "../../../../state/store";
-import Button from "../../../../components/Button";
-import ConditionCard from "../../../../components/ConditionCard";
-import Typography from "../../../../components/Typography";
-import VStack from "../../../../components/VStack";
+import { every, keyBy, values } from 'lodash'
+import { Link, router, useLocalSearchParams } from 'expo-router'
+import { ScrollView, TouchableOpacity } from 'react-native'
+import { State } from '../../../../state/interfaces'
+import { useMemo } from 'react'
+import { useStore } from '../../../../state/store'
+import Button from '../../../../components/Button'
+import ConditionCard from '../../../../components/ConditionCard'
+import Typography from '../../../../components/Typography'
+import VStack from '../../../../components/VStack'
 
 const Category = () => {
-    const { id, inspectionId } = useLocalSearchParams();
-    if (typeof id !== "string" || typeof inspectionId !== "string")
-        throw new Error("BOOM");
+    const { id, inspectionId } = useLocalSearchParams()
+    if (typeof id !== 'string' || typeof inspectionId !== 'string')
+        throw new Error('BOOM')
 
-    const category = useStore((store) => store.categories.index[id]);
-    const observations = useStore((store) => store.observations);
+    const category = useStore((store) => store.categories.index[id])
+    const observations = useStore((store) => store.observations)
     const createSimpleObservation = useStore(
         (store) => store.createSimpleObservation
-    );
+    )
 
     const observationsAlreadyMade = useMemo(
         () =>
@@ -28,12 +28,12 @@ const Category = () => {
                     observation.categoryId === Number(id)
             ),
         [observations.index]
-    );
+    )
 
     const observationsPerCondition = useMemo(
-        () => keyBy(observationsAlreadyMade, "conditionId"),
+        () => keyBy(observationsAlreadyMade, 'conditionId'),
         [observations, inspectionId, id]
-    );
+    )
 
     const omitCategory = () => {
         category.conditions.forEach((condition) => {
@@ -42,22 +42,24 @@ const Category = () => {
                 categoryId: Number(id),
                 conditionId: condition.id,
                 state: State.SKIPPED,
-                description: "No Aplica",
-            });
-        });
+                description: 'No Aplica'
+            })
+        })
 
-        router.back();
-    };
+        router.back()
+    }
 
-    const userSkippedEveryPossibleCondition =
+    const hasObservations = observationsAlreadyMade.length > 0
+
+    const isSkipped =
         observationsAlreadyMade.length === category.conditions.length &&
         every(
             observationsPerCondition,
             (observation) => observation.state === State.SKIPPED
-        );
+        )
 
     return (
-        <ScrollView style={{ backgroundColor: "white" }}>
+        <ScrollView style={{ backgroundColor: 'white' }}>
             <VStack style={{ padding: 16 }}>
                 <Typography variant="title">{category.name}</Typography>
 
@@ -68,13 +70,13 @@ const Category = () => {
                         key={condition.id}
                         href={{
                             pathname:
-                                "/inspections/categories/observations/new",
+                                '/inspections/categories/observations/new',
                             params: {
                                 inspectionId,
                                 categoryId: id,
                                 conditionId: condition.id,
-                                conditionName: condition.name,
-                            },
+                                conditionName: condition.name
+                            }
                         }}
                         asChild
                     >
@@ -91,17 +93,17 @@ const Category = () => {
                     </Link>
                 ))}
 
-                {userSkippedEveryPossibleCondition === false && (
+                {hasObservations === false && isSkipped === false && (
                     <Button
                         onPress={omitCategory}
-                        style={{ backgroundColor: "#ef4444" }}
+                        style={{ backgroundColor: '#ef4444' }}
                     >
                         Omitir
                     </Button>
                 )}
             </VStack>
         </ScrollView>
-    );
-};
+    )
+}
 
-export default Category;
+export default Category

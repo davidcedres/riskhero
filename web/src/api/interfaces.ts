@@ -54,6 +54,14 @@ export interface Observation {
     conditionId: number
 }
 
+export interface Evidence {
+    id: number
+    key: string
+    observationId: number
+    updatedAt: string
+    url: string
+}
+
 export enum State {
     ACCEPTABLE = 'ACCEPTABLE',
     UNSAFE = 'UNSAFE',

@@ -48,7 +48,8 @@ interface State {
 interface Actions {
     // base
     setSyncing: (val: boolean) => void
-    setAuth: (token?: string) => void
+    login: (token?: string) => void
+    logout: () => void
 
     // categories
     setCategories: (categories: Category[]) => void
@@ -109,10 +110,30 @@ export const useStore = create(
                     state.sync.loading = val
                 }),
 
-            setAuth: (token) =>
+            login: (token) =>
                 set((state) => {
                     state.auth.logged = token !== undefined
                     state.auth.token = token
+                }),
+
+            logout: () =>
+                set((state) => {
+                    state.sync.loading = false
+
+                    state.auth.logged = false
+                    state.auth.token = undefined
+
+                    state.inspections.ids = []
+                    state.inspections.index = {}
+
+                    state.categories.ids = []
+                    state.categories.index = {}
+
+                    state.observations.ids = []
+                    state.observations.index = {}
+
+                    state.evidences.ids = []
+                    state.evidences.index = {}
                 }),
 
             setCategories: (categories: Category[]) =>

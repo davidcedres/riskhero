@@ -103,6 +103,9 @@ const push = async () => {
                     uploadType: FileSystem.FileSystemUploadType.MULTIPART,
                     parameters: {
                         observationId: String(observationId)
+                    },
+                    headers: {
+                        Authorization: 'Bearer ' + store.auth.token
                     }
                 }
             )

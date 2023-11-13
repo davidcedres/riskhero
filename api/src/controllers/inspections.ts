@@ -13,9 +13,11 @@ inspections.get('/', async (req: Request<User>, res) => {
 
     const inspections = await prismaClient.inspection.findMany({
         where: {
-            area: {
-                organizationId: session.organizationId
-            },
+            ...(session.role !== 'ADMIN' && {
+                area: {
+                    organizationId: session.organizationId
+                }
+            }),
             ...(session.role === 'EMPLOYEE' && {
                 inspector: { id: session.id }
             })
@@ -38,9 +40,11 @@ inspections.get('/:id', async (req: Request<User>, res) => {
     const inspection = await prismaClient.inspection.findFirstOrThrow({
         where: {
             id: Number(req.params.id),
-            area: {
-                organizationId: session.organizationId
-            },
+            ...(session.role !== 'ADMIN' && {
+                area: {
+                    organizationId: session.organizationId
+                }
+            }),
             ...(session.role === 'EMPLOYEE' && {
                 inspector: {
                     id: session.id

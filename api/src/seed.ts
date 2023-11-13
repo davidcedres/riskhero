@@ -6,15 +6,29 @@ dotenv.config()
 
 const prisma = new PrismaClient()
 
+await prisma.user.create({
+    data: {
+        email: 'admin@riskninja.io',
+        name: 'David Cedres',
+        role: 'ADMIN',
+        password: hashSync('Password.123', Number(process.env.SALT!)),
+        updatedAt: new Date()
+    }
+})
+
+console.log('added admin')
+
 const organization = await prisma.organization.create({
     data: {
         name: 'Universidad De Los Andes'
     }
 })
 
+console.log('added organization')
+
 await prisma.user.create({
     data: {
-        email: 'david@riskninja.io',
+        email: 'david.cedresx@gmail.com',
         name: 'David Cedres',
         role: 'MANAGER',
         organizationId: organization.id,
@@ -22,6 +36,8 @@ await prisma.user.create({
         updatedAt: new Date()
     }
 })
+
+console.log('added organization manager')
 
 const baseEntities = [
     {
@@ -113,6 +129,8 @@ await Promise.all(
     )
 )
 
+console.log('added conditions')
+
 for (const { conditions, category } of baseEntities) {
     const conditionsQuery = await prisma.condition.findMany({
         where: {
@@ -133,4 +151,6 @@ for (const { conditions, category } of baseEntities) {
             updatedAt: new Date()
         }
     })
+
+    console.log('added category')
 }

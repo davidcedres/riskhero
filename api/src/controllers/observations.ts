@@ -12,32 +12,41 @@ observations.get(
     '/',
     validateRequest({
         query: z.object({
-            inspectionId: z.coerce.number()
+            inspectionId: z.coerce.number(),
+            state: z
+                .union([z.literal('GOOD_ONES'), z.literal('BAD_ONES')])
+                .optional()
         })
     }),
     async (req, res) => {
         // @ts-expect-error
         const session = req.auth! as User
 
-        console.log(req.query)
-
         const observations = await prismaClient.observation.findMany({
             where: {
                 inspection: {
                     id: Number(req.query.inspectionId),
-                    area: {
-                        organizationId: session.organizationId
-                    },
+                    ...(session.role !== 'ADMIN' && {
+                        area: {
+                            organizationId: session.organizationId
+                        }
+                    }),
                     ...(session.role === 'EMPLOYEE' && {
                         inspector: {
                             id: session.id
                         }
                     })
-                }
+                },
+                ...(req.query.state === 'BAD_ONES' && {
+                    state: {
+                        in: ['MISSING', 'NEEDS_REPAIR', 'UNSAFE']
+                    }
+                })
             },
             include: {
                 category: true,
-                condition: true
+                condition: true,
+                evidences: true
             }
         })
 

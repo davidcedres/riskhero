@@ -1,21 +1,21 @@
-import { Link, router, useLocalSearchParams } from "expo-router";
-import Typography from "../../../components/Typography";
-import VStack from "../../../components/VStack";
-import { useStore } from "../../../state/store";
-import { ScrollView, TouchableOpacity } from "react-native";
-import CategoryCard from "../../../components/CategoryCard";
-import { useMemo } from "react";
-import { every, keyBy, values } from "lodash";
-import Button from "../../../components/Button";
+import { Link, router, useLocalSearchParams } from 'expo-router'
+import Typography from '../../../components/Typography'
+import VStack from '../../../components/VStack'
+import { useStore } from '../../../state/store'
+import { ScrollView, TouchableOpacity } from 'react-native'
+import CategoryCard from '../../../components/CategoryCard'
+import { useMemo } from 'react'
+import { every, keyBy, values } from 'lodash'
+import Button from '../../../components/Button'
 
 const Inspection = () => {
-    const { id } = useLocalSearchParams();
-    if (typeof id !== "string") throw new Error("BOOM");
+    const { id } = useLocalSearchParams()
+    if (typeof id !== 'string') throw new Error('BOOM')
 
-    const inspection = useStore((store) => store.inspections.index[id]);
-    const categories = useStore((store) => store.categories);
-    const observations = useStore((store) => store.observations);
-    const closeInspection = useStore((store) => store.closeInspection);
+    const inspection = useStore((store) => store.inspections.index[id])
+    const categories = useStore((store) => store.categories)
+    const observations = useStore((store) => store.observations)
+    const closeInspection = useStore((store) => store.closeInspection)
 
     // COMPUTED PROPERTIES
     const statsPerCategory = useMemo(
@@ -28,33 +28,33 @@ const Inspection = () => {
                             observation.inspectionId === Number(id) &&
                             observation.categoryId === category.id
                     ).length,
-                    conditions: category.conditions.length,
+                    conditions: category.conditions.length
                 })),
-                "id"
+                'id'
             ),
         [categories, observations]
-    );
+    )
 
     const allCategoriesHaveFullData = useMemo(
         () =>
             every(categories.ids, (categoryId) => {
-                const stats = statsPerCategory[categoryId];
-                return stats.observations === stats.conditions;
+                const stats = statsPerCategory[categoryId]
+                return stats.observations === stats.conditions
             }),
         [statsPerCategory]
-    );
+    )
 
     const inspectionCanBeClosed =
-        inspection.status === "OPEN" && allCategoriesHaveFullData;
+        inspection.status === 'OPEN' && allCategoriesHaveFullData
 
     // CALLBACKS
     const handleClose = () => {
-        closeInspection(id);
-        router.back();
-    };
+        closeInspection(id)
+        router.back()
+    }
 
     return (
-        <ScrollView style={{ backgroundColor: "white" }}>
+        <ScrollView style={{ backgroundColor: 'white' }}>
             <VStack style={{ padding: 16 }}>
                 <VStack style={{ marginBottom: 16 }}>
                     <Typography variant="title">Inspección</Typography>
@@ -75,8 +75,8 @@ const Inspection = () => {
                                 href={{
                                     pathname: `/inspections/categories/${category.id}`,
                                     params: {
-                                        inspectionId: id,
-                                    },
+                                        inspectionId: id
+                                    }
                                 }}
                                 asChild
                             >
@@ -104,7 +104,7 @@ const Inspection = () => {
                 )}
             </VStack>
         </ScrollView>
-    );
-};
+    )
+}
 
-export default Inspection;
+export default Inspection

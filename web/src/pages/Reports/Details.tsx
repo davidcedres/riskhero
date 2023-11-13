@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import {
     Category,
     Condition,
+    Evidence,
     Observation,
     Report,
     State,
@@ -19,10 +20,6 @@ import ula from '../../assets/ula-logo.png'
 
 // TODO: this file is extremely similar to New.tsx
 // reuse the right parts via custom hooks
-
-const randomImage =
-    'https://images.unsplash.com/photo-1481349518771-20055b2a7b24?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww'
-
 const ReportDetails = () => {
     const { id } = useParams()
     const isPrint = useMediaQuery('print')
@@ -40,12 +37,14 @@ const ReportDetails = () => {
     const observationsRequest = useQuery(
         ['FetchObservations', ispectionId],
         () =>
-            api.get<(Observation & { condition: Condition })[]>(
-                `/observations`,
-                {
-                    params: { inspectionId: ispectionId }
-                }
-            ),
+            api.get<
+                (Observation & {
+                    condition: Condition
+                    evidences: Evidence[]
+                })[]
+            >(`/observations`, {
+                params: { inspectionId: ispectionId, state: 'BAD_ONES' }
+            }),
         {
             enabled: Boolean(ispectionId)
         }
@@ -107,34 +106,17 @@ const ReportDetails = () => {
             </Text>
 
             {categoriesWithBadObservations.map((category, index) => {
-                const badObservations = observations.filter(
-                    (observation) =>
-                        [
-                            State.MISSING,
-                            State.NEEDS_REPAIR,
-                            State.UNSAFE
-                        ].includes(observation.state) &&
-                        observation.categoryId === category.id
+                const categoryObservations = observations.filter(
+                    (observation) => observation.categoryId === category.id
                 )
 
-                if (badObservations.length === 0) return
+                if (categoryObservations.length === 0) return
 
                 return (
                     <Stack style={{ borderRadius: 8 }}>
-                        <Title
-                            size="h2"
-                            style={
-                                index === 0
-                                    ? undefined
-                                    : {
-                                          'page-break-before': 'always'
-                                      }
-                            }
-                        >
-                            {category.name}
-                        </Title>
+                        <Title size="h2">{category.name}</Title>
 
-                        {badObservations.map((observation) => {
+                        {categoryObservations.map((observation) => {
                             return (
                                 <Stack>
                                     <Title size="h3">
@@ -158,14 +140,14 @@ const ReportDetails = () => {
                                     </Text>
 
                                     <Image
-                                        src={randomImage}
+                                        src={observation.evidences[0].url}
                                         maw={128}
                                         mah={128}
                                         style={{
                                             cursor: 'pointer',
                                             borderRadius: 4
                                         }}
-                                        // onClick={() => setEvidence(true)}
+                                        onClick={() => setEvidence(true)}
                                     />
 
                                     <Text>{observation.analysis}</Text>
@@ -175,6 +157,11 @@ const ReportDetails = () => {
                     </Stack>
                 )
             })}
+
+            <Stack>
+                <Title size="h2">Conclusión</Title>
+                <Text>{report.conclusion}</Text>
+            </Stack>
         </Stack>
     )
 }

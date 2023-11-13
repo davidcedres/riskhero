@@ -8,13 +8,11 @@ const App = () => {
     const [ready, setReady] = useState(false)
 
     const [jwt] = useLocalStorage({
-        key: 'jwt',
-        defaultValue: '_'
+        key: 'jwt'
     })
 
     const [user] = useLocalStorage({
-        key: 'user',
-        defaultValue: '_'
+        key: 'user'
     })
 
     useEffect(() => {
@@ -23,7 +21,7 @@ const App = () => {
 
     if (ready === false) return null
 
-    if (jwt === '_' || user === '_') return <Public />
+    if ([undefined, '_'].includes(jwt)) return <Public />
 
     return (
         <SessionContext.Provider value={JSON.parse(user!)}>

@@ -7,10 +7,10 @@ import VStack from '../../../components/VStack'
 import Avatar from '../../../components/Avatar'
 
 const Profile = () => {
-    const { setAuth } = useStore()
+    const { logout } = useStore()
 
     const handleLogout = () => {
-        setAuth(undefined)
+        logout()
         router.replace('/sign-in')
     }
 

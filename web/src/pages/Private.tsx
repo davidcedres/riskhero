@@ -94,7 +94,9 @@ const Layout: FC<{ role: User['role'] }> = ({ role }) => {
                                     }
                                     label={link.label}
                                     active={isActive}
+                                    variant="light"
                                     p="md"
+                                    style={{ borderRadius: 4 }}
                                 />
                             )}
                         </RouterLink>
@@ -102,7 +104,7 @@ const Layout: FC<{ role: User['role'] }> = ({ role }) => {
             </AppShell.Navbar>
 
             <AppShell.Main>
-                <Container fluid>
+                <Container fluid pb="lg">
                     <Outlet />
                 </Container>
             </AppShell.Main>

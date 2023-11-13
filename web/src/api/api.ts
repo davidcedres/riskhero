@@ -7,7 +7,9 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) => {
         const jwt = localStorage.getItem('jwt')
-        if (jwt === null) return config
+        if (jwt === null || jwt === '"_"') return config
+
+        console.log('pro', jwt)
 
         config.headers['Authorization'] = `Bearer ${jwt.slice(1, -1)}`
         return config

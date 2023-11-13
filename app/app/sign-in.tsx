@@ -23,7 +23,7 @@ type Form = {
 }
 
 const Signin = () => {
-    const { setAuth } = useStore()
+    const { login } = useStore()
     const [loading, setLoading] = useState(false)
     const { control, handleSubmit } = useForm<Form>({
         resolver: zodResolver(schema)
@@ -37,7 +37,7 @@ const Signin = () => {
                 '/sessions',
                 payload
             )
-            setAuth(response.data.jwt)
+            login(response.data.jwt)
             router.replace('/sync')
         } catch (error) {
             setLoading(false)

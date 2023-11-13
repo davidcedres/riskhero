@@ -35,8 +35,6 @@ areas.post(
     async (req: Request<User>, res) => {
         const session = req.auth!
 
-        console.log(session)
-
         if (session.role !== 'MANAGER') return res.status(401)
 
         const area = await prismaClient.area.create({

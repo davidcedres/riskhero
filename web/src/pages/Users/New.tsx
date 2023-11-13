@@ -9,14 +9,12 @@ import api from '../../api/api'
 interface Form {
     name: string
     email: string
-    password: string
 }
 
 const schema = yup
     .object({
         name: yup.string().required(),
-        email: yup.string().email().required(),
-        password: yup.string().min(6).required()
+        email: yup.string().email().required()
     })
     .required()
 
@@ -37,38 +35,33 @@ const NewUser = () => {
     }
 
     return (
-        <Stack maw={512}>
-            <Anchor component={Link} to="/users">
-                ← Usuarios
-            </Anchor>
-            <Title>Nuevo Usuario</Title>
-            <TextInput
-                required
-                label="Nombre"
-                placeholder="Nombre"
-                {...register('name')}
-            />
-            <TextInput
-                required
-                label="Correo"
-                placeholder="Correo"
-                {...register('email')}
-            />
-            <TextInput
-                required
-                type="password"
-                label="Contraseña"
-                placeholder="*******"
-                {...register('password')}
-            />
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack maw={512}>
+                <Anchor component={Link} to="/users">
+                    ← Usuarios
+                </Anchor>
 
-            <Button
-                onClick={handleSubmit(onSubmit)}
-                loading={request.isLoading}
-            >
-                Crear
-            </Button>
-        </Stack>
+                <Title>Nuevo Usuario</Title>
+
+                <TextInput
+                    required
+                    label="Nombre"
+                    placeholder="Nombre"
+                    {...register('name')}
+                />
+
+                <TextInput
+                    required
+                    label="Correo"
+                    placeholder="Correo"
+                    {...register('email')}
+                />
+
+                <Button loading={request.isLoading} type="submit">
+                    Crear
+                </Button>
+            </Stack>
+        </form>
     )
 }
 
