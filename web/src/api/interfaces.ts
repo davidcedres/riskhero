@@ -29,6 +29,7 @@ export interface Report {
         date: string
     }
     inspectionId: number
+    url?: string
 }
 
 export interface Category {

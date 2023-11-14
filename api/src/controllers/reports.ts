@@ -1,14 +1,31 @@
 import { PrismaClient } from '@prisma/client'
+import { Queue, Worker } from 'bullmq'
 import express from 'express'
 import { Request } from 'express-jwt'
 import { nanoid } from 'nanoid'
-import puppeteer from 'puppeteer'
+import puppeteer, { Browser } from 'puppeteer'
 
 import { User } from '../interfaces.js'
 import { minioClient, s3 } from '../s3.js'
 
 const prismaClient = new PrismaClient()
 const reports = express.Router()
+
+const queue = new Queue('reports', {
+    connection: {
+        host: process.env.REDISHOST,
+        port: Number(process.env.REDISPORT),
+        username: process.env.REDISUSER,
+        password: process.env.REDISPASSWORD
+    },
+    defaultJobOptions: {
+        attempts: 3,
+        backoff: {
+            type: 'exponential',
+            delay: 1000
+        }
+    }
+})
 
 reports.get('/', async (req: Request<User>, res) => {
     const session = req.auth!
@@ -88,9 +105,7 @@ reports.post(
         await prismaClient.inspection.findFirstOrThrow({
             where: {
                 id: req.body.inspectionId,
-                status: {
-                    not: 'CLOSED'
-                },
+                status: 'DONE', // previous action
                 inspector: {
                     id: session.id
                 },
@@ -108,21 +123,55 @@ reports.post(
             }
         })
 
-        const browser = await puppeteer.connect({
+        queue.add('generate-pdf', {
+            reportId: report.id
+        })
+
+        res.status(200).send()
+    }
+)
+
+new Worker('reports', async (job) => {
+    console.log('Will Execute Job ', job.name)
+
+    const reportId = job.data.reportId
+
+    let browser: Browser | null = null
+    let error = false
+
+    try {
+        browser = await puppeteer.connect({
             browserWSEndpoint:
                 'wss://chrome.browserless.io?token=65d1263e-b3e4-4864-a7a6-f9f9ec247d55'
         })
 
         const page = await browser.newPage()
-        await page.goto('https://riskninja.io/start')
-        await page.type('input[type="email"]', 'admin@riskninja.io')
-        await page.type('input[type="password"]', 'Password.123')
-        await page.goto('https://riskninja.io/reports/' + report.id, {
+
+        await page.goto('https://riskninja.io/start', {
             waitUntil: 'networkidle0'
         })
-        const pdf = await page.pdf()
+
+        await page.type('input[name="email"]', 'admin@riskninja.io')
+        await page.type('input[name="password"]', 'Password.123')
+        await page.click('button[type="submit"]')
+        await page.waitForNetworkIdle()
+
+        await page.goto('https://riskninja.io/reports/' + reportId, {
+            waitUntil: 'networkidle0'
+        })
+
+        const pdf = await page.pdf({
+            margin: {
+                left: 32,
+                top: 32,
+                right: 32,
+                bottom: 32
+            },
+            printBackground: true
+        })
 
         const key = `${nanoid()}.pdf`
+
         await s3.putObject({
             Bucket: 'reports',
             Key: key,
@@ -130,17 +179,24 @@ reports.post(
             ContentType: 'application/pdf'
         })
 
+        const url = await minioClient.presignedGetObject('reports', key)
+
         await prismaClient.report.update({
             where: {
-                id: report.id
+                id: reportId
             },
             data: {
-                url: await minioClient.presignedGetObject('reports', key)
+                url
             }
         })
-
-        res.json(report)
+    } catch (e) {
+        error = true
+    } finally {
+        if (browser) browser.close()
     }
-)
+
+    // make the job fail
+    if (error) throw new Error()
+})
 
 export default reports

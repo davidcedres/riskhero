@@ -1,8 +1,16 @@
-import { Badge, Button, Loader, Stack, Table, Text, Title } from '@mantine/core'
+import {
+    Anchor,
+    Badge,
+    Button,
+    Loader,
+    Stack,
+    Table,
+    Text,
+    Title
+} from '@mantine/core'
 import { format } from 'date-fns'
 import { IconEye } from '@tabler/icons-react'
 import { Report } from '../../api/interfaces'
-import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import api from '../../api/api'
 import es from 'date-fns/locale/es'
@@ -13,7 +21,6 @@ import { SessionContext } from '../../utils/useSession'
 const Reports = () => {
     // hooks
     const session = useContext(SessionContext)
-    const navigate = useNavigate()
 
     // queries
     const query = useQuery(['FetchReports'], () =>
@@ -66,14 +73,23 @@ const Reports = () => {
                                     </Text>
                                 </Table.Td>
                                 <Table.Td>
-                                    <Button
-                                        rightSection={<IconEye size={14} />}
-                                        onClick={() =>
-                                            navigate(String(report.id))
-                                        }
-                                    >
-                                        Visualizar
-                                    </Button>
+                                    {report.url ? (
+                                        <Anchor
+                                            href={report.url}
+                                            target="_blank"
+                                            referrerPolicy="no-referrer"
+                                        >
+                                            <Button
+                                                rightSection={
+                                                    <IconEye size={14} />
+                                                }
+                                            >
+                                                PDF
+                                            </Button>
+                                        </Anchor>
+                                    ) : (
+                                        <Loader size="sm" />
+                                    )}
                                 </Table.Td>
                             </Table.Tr>
                         ))}
