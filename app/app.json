@@ -26,7 +26,8 @@
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "io.riskninja"
     },
     "web": {
       "favicon": "./assets/favicon.png"

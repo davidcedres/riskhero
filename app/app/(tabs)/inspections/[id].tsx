@@ -10,7 +10,7 @@ import Button from '../../../components/Button'
 
 const Inspection = () => {
     const { id } = useLocalSearchParams()
-    if (typeof id !== 'string') throw new Error('BOOM')
+    if (typeof id !== 'string') throw new Error('Inspection Detail: Bad Id')
 
     const inspection = useStore((store) => store.inspections.index[id])
     const categories = useStore((store) => store.categories)

@@ -12,7 +12,9 @@ import VStack from '../../../../components/VStack'
 const Category = () => {
     const { id, inspectionId } = useLocalSearchParams()
     if (typeof id !== 'string' || typeof inspectionId !== 'string')
-        throw new Error('BOOM')
+        throw new Error(
+            'params.id not string or params.inspectionId not string'
+        )
 
     const category = useStore((store) => store.categories.index[id])
     const observations = useStore((store) => store.observations)

@@ -3,65 +3,65 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    View,
-} from "react-native";
-import Typography from "../../../../../components/Typography";
-import VStack from "../../../../../components/VStack";
-import HStack from "../../../../../components/HStack";
-import Button from "../../../../../components/Button";
-import { useRef, useState } from "react";
+    View
+} from 'react-native'
+import Typography from '../../../../../components/Typography'
+import VStack from '../../../../../components/VStack'
+import HStack from '../../../../../components/HStack'
+import Button from '../../../../../components/Button'
+import { useRef, useState } from 'react'
 import {
     State,
     getStateColor,
     getStateIcon,
-    getStateLabel,
-} from "../../../../../state/interfaces";
-import StateCard from "../../../../../components/StateCard";
-import { router, useLocalSearchParams } from "expo-router";
-import { useStore } from "../../../../../state/store";
-import { Camera, CameraType } from "expo-camera";
-import * as FileSystem from "expo-file-system";
+    getStateLabel
+} from '../../../../../state/interfaces'
+import StateCard from '../../../../../components/StateCard'
+import { router, useLocalSearchParams } from 'expo-router'
+import { useStore } from '../../../../../state/store'
+import { Camera, CameraType } from 'expo-camera'
+import * as FileSystem from 'expo-file-system'
 
 const Observation = () => {
     // HOOKS
     const { inspectionId, categoryId, conditionId, conditionName } =
-        useLocalSearchParams();
+        useLocalSearchParams()
 
     if (
-        typeof inspectionId !== "string" ||
-        typeof categoryId !== "string" ||
-        typeof conditionId !== "string" ||
-        typeof conditionName !== "string"
+        typeof inspectionId !== 'string' ||
+        typeof categoryId !== 'string' ||
+        typeof conditionId !== 'string' ||
+        typeof conditionName !== 'string'
     )
-        throw new Error("Bad params");
+        throw new Error('Bad params')
 
     // CAMERA STATE
     const [stage, setStage] = useState<
-        "PICK_STATE" | "TAKE_PICTURE" | "WRITE_CAPTION"
-    >("PICK_STATE");
-    const cameraRef = useRef<Camera>();
+        'PICK_STATE' | 'TAKE_PICTURE' | 'WRITE_CAPTION'
+    >('PICK_STATE')
+    const cameraRef = useRef<Camera>()
 
     // TRANSIENT STATE / BUFFERS
-    const [state, setState] = useState<State>();
-    const [description, setDescription] = useState("");
-    const [filename, setFilename] = useState<string>();
+    const [state, setState] = useState<State>()
+    const [description, setDescription] = useState('')
+    const [filename, setFilename] = useState<string>()
 
     // DATA AND MUTATORS
-    const category = useStore((store) => store.categories.index[categoryId]);
+    const category = useStore((store) => store.categories.index[categoryId])
     const createSimpleObservation = useStore(
         (store) => store.createSimpleObservation
-    );
+    )
     const createObservationWithEvidence = useStore(
         (store) => store.createObservationWithEvidence
-    );
+    )
 
     // CALLBACKS
     const close = () => {
-        router.back();
-    };
+        router.back()
+    }
 
     const saveState = async () => {
-        if (state === undefined) return;
+        if (state === undefined) return
 
         if (state === State.ACCEPTABLE) {
             createSimpleObservation({
@@ -69,53 +69,54 @@ const Observation = () => {
                 categoryId: Number(categoryId),
                 conditionId: Number(conditionId),
                 state,
-                description: "Condición en buen estado",
-            });
+                description: 'Condición en buen estado'
+            })
 
-            return close();
+            return close()
         }
 
-        const { status } = await Camera.requestCameraPermissionsAsync();
+        const { status } = await Camera.requestCameraPermissionsAsync()
 
-        if (status === "granted") {
-            return setStage("TAKE_PICTURE");
+        if (status === 'granted') {
+            return setStage('TAKE_PICTURE')
         }
-    };
+    }
 
     const savePicture = async () => {
-        if (cameraRef.current === undefined) throw new Error("BOOM");
+        if (cameraRef.current === undefined)
+            throw new Error('camera instance not found')
 
-        const { uri } = await cameraRef.current.takePictureAsync();
-        const filename = uri.split("/").pop();
+        const { uri } = await cameraRef.current.takePictureAsync()
+        const filename = uri.split('/').pop()
 
         if (FileSystem.documentDirectory === null) {
-            throw new Error("App does not have access to document directory");
+            throw new Error('App does not have access to document directory')
         }
 
         const evidencesDirectory = await FileSystem.getInfoAsync(
-            FileSystem.documentDirectory + "/evidences"
-        );
+            FileSystem.documentDirectory + '/evidences'
+        )
 
         if (evidencesDirectory.exists === false) {
             await FileSystem.makeDirectoryAsync(
-                FileSystem.documentDirectory + "evidences"
-            );
+                FileSystem.documentDirectory + 'evidences'
+            )
         }
 
         await FileSystem.copyAsync({
             from: uri,
-            to: FileSystem.documentDirectory + `evidences/` + filename,
-        });
+            to: FileSystem.documentDirectory + `evidences/` + filename
+        })
 
-        setFilename(filename);
-        setStage("WRITE_CAPTION");
-    };
+        setFilename(filename)
+        setStage('WRITE_CAPTION')
+    }
 
     const saveCaption = () => {
         if (state === undefined || filename === undefined)
             throw new Error(
-                "Bad logic, state and filename must be defined by now"
-            );
+                'Bad logic, state and filename must be defined by now'
+            )
 
         createObservationWithEvidence({
             observation: {
@@ -123,22 +124,22 @@ const Observation = () => {
                 categoryId: Number(categoryId),
                 conditionId: Number(conditionId),
                 state,
-                description,
+                description
             },
             evidence: {
-                filename,
-            },
-        });
+                filename
+            }
+        })
 
-        close();
-    };
+        close()
+    }
 
     return (
-        <ScrollView style={{ backgroundColor: "white" }}>
+        <ScrollView style={{ backgroundColor: 'white' }}>
             <VStack
                 style={{
                     padding: 32,
-                    justifyContent: "space-between",
+                    justifyContent: 'space-between'
                 }}
             >
                 <VStack>
@@ -149,7 +150,7 @@ const Observation = () => {
                         </Typography>
                     </VStack>
 
-                    {stage === "PICK_STATE" && (
+                    {stage === 'PICK_STATE' && (
                         <>
                             <VStack style={{ gap: 32 }}>
                                 <HStack style={styles.horizontal}>
@@ -225,7 +226,7 @@ const Observation = () => {
                         </>
                     )}
 
-                    {stage === "TAKE_PICTURE" && (
+                    {stage === 'TAKE_PICTURE' && (
                         <>
                             <View style={styles.preview}>
                                 <Camera
@@ -242,7 +243,7 @@ const Observation = () => {
                         </>
                     )}
 
-                    {stage === "WRITE_CAPTION" && (
+                    {stage === 'WRITE_CAPTION' && (
                         <>
                             <TextInput
                                 multiline={true}
@@ -258,30 +259,30 @@ const Observation = () => {
                 </VStack>
             </VStack>
         </ScrollView>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     horizontal: {
-        justifyContent: "center",
-        gap: 32,
+        justifyContent: 'center',
+        gap: 32
     },
     camera: {
         height: 320,
-        width: "100%",
+        width: '100%'
     },
     preview: {
         borderRadius: 8,
-        overflow: "hidden",
+        overflow: 'hidden'
     },
     textarea: {
         height: 256,
         padding: 8,
         borderWidth: 1,
-        borderColor: "#64748b",
+        borderColor: '#64748b',
         borderRadius: 8,
-        lineHeight: 24,
-    },
-});
+        lineHeight: 24
+    }
+})
 
-export default Observation;
+export default Observation

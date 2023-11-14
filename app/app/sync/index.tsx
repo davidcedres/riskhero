@@ -1,11 +1,11 @@
-import { SafeAreaView, Text, View } from 'react-native'
+import { ActivityIndicator, SafeAreaView, View } from 'react-native'
 import { useCallback } from 'react'
 import { router, useFocusEffect } from 'expo-router'
 import { useStore } from '../../state/store'
 import sync from './sync'
 import Typography from '../../components/Typography'
 import VStack from '../../components/VStack'
-import LottieView from 'lottie-react-native'
+import Button from '../../components/Button'
 
 const Sync = () => {
     const state = useStore((store) => store.sync)
@@ -33,28 +33,16 @@ const Sync = () => {
                         <Typography variant="title">{title}</Typography>
 
                         {state.loading && (
-                            <Typography variant="body">
-                                Esto podria tardar varios minutos.
-                            </Typography>
+                            <View style={{ marginTop: 25 }}>
+                                <ActivityIndicator />
+                            </View>
                         )}
                     </VStack>
                 </VStack>
 
                 {state.loading === false && (
-                    <LottieView
-                        autoPlay
-                        style={{
-                            width: 200,
-                            height: 200,
-                            alignSelf: 'center'
-                        }}
-                        source={require('../../assets/check.json')}
-                        onAnimationFinish={navigateAway}
-                        loop={false}
-                    />
+                    <Button onPress={navigateAway}>Continuar</Button>
                 )}
-
-                <Text></Text>
             </View>
         </SafeAreaView>
     )
