@@ -28,7 +28,7 @@ console.log('added organization')
 
 await prisma.user.create({
     data: {
-        email: 'david.cedresx@gmail.com',
+        email: 'manager@ula.ve',
         name: 'David Cedres',
         role: 'MANAGER',
         organizationId: organization.id,

@@ -5,7 +5,6 @@ import { useStore } from '../../state/store'
 import sync from './sync'
 import Typography from '../../components/Typography'
 import VStack from '../../components/VStack'
-import Button from '../../components/Button'
 import LottieView from 'lottie-react-native'
 
 const Sync = () => {

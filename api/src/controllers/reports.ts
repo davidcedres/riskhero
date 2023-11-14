@@ -11,6 +11,8 @@ import { minioClient, s3 } from '../s3.js'
 const prismaClient = new PrismaClient()
 const reports = express.Router()
 
+console.log('REDISHOST IS', process.env.REDISHOST)
+
 const queue = new Queue('reports', {
     connection: {
         host: process.env.REDISHOST,
