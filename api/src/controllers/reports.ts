@@ -132,7 +132,7 @@ reports.post(
 )
 
 new Worker('reports', async (job) => {
-    console.log('Will Execute Job ', job.name)
+    console.log('job to be executed ', job.name)
 
     const reportId = job.data.reportId
 
@@ -191,6 +191,7 @@ new Worker('reports', async (job) => {
         })
     } catch (e) {
         error = true
+        console.log('job failed')
     } finally {
         if (browser) browser.close()
     }
