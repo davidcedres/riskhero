@@ -11,15 +11,15 @@ import { minioClient, s3 } from '../s3.js'
 const prismaClient = new PrismaClient()
 const reports = express.Router()
 
-console.log('REDISHOST IS', process.env.REDISHOST)
+const connection = {
+    host: process.env.REDISHOST,
+    port: Number(process.env.REDISPORT),
+    username: process.env.REDISUSER,
+    password: process.env.REDISPASSWORD
+}
 
 const queue = new Queue('reports', {
-    connection: {
-        host: process.env.REDISHOST,
-        port: Number(process.env.REDISPORT),
-        username: process.env.REDISUSER,
-        password: process.env.REDISPASSWORD
-    },
+    connection,
     defaultJobOptions: {
         attempts: 3,
         backoff: {
@@ -133,73 +133,79 @@ reports.post(
     }
 )
 
-new Worker('reports', async (job) => {
-    console.log('job to be executed ', job.name)
+new Worker(
+    'reports',
+    async (job) => {
+        console.log('job to be executed ', job.name)
 
-    const reportId = job.data.reportId
+        const reportId = job.data.reportId
 
-    let browser: Browser | null = null
-    let error = false
+        let browser: Browser | null = null
+        let error = false
 
-    try {
-        browser = await puppeteer.connect({
-            browserWSEndpoint:
-                'wss://chrome.browserless.io?token=65d1263e-b3e4-4864-a7a6-f9f9ec247d55'
-        })
+        try {
+            browser = await puppeteer.connect({
+                browserWSEndpoint:
+                    'wss://chrome.browserless.io?token=65d1263e-b3e4-4864-a7a6-f9f9ec247d55'
+            })
 
-        const page = await browser.newPage()
+            const page = await browser.newPage()
 
-        await page.goto('https://riskninja.io/start', {
-            waitUntil: 'networkidle0'
-        })
+            await page.goto('https://riskninja.io/start', {
+                waitUntil: 'networkidle0'
+            })
 
-        await page.type('input[name="email"]', 'admin@riskninja.io')
-        await page.type('input[name="password"]', 'Password.123')
-        await page.click('button[type="submit"]')
-        await page.waitForNetworkIdle()
+            await page.type('input[name="email"]', 'admin@riskninja.io')
+            await page.type('input[name="password"]', 'Password.123')
+            await page.click('button[type="submit"]')
+            await page.waitForNetworkIdle()
 
-        await page.goto('https://riskninja.io/reports/' + reportId, {
-            waitUntil: 'networkidle0'
-        })
+            await page.goto('https://riskninja.io/reports/' + reportId, {
+                waitUntil: 'networkidle0'
+            })
 
-        const pdf = await page.pdf({
-            margin: {
-                left: 32,
-                top: 32,
-                right: 32,
-                bottom: 32
-            },
-            printBackground: true
-        })
+            const pdf = await page.pdf({
+                margin: {
+                    left: 32,
+                    top: 32,
+                    right: 32,
+                    bottom: 32
+                },
+                printBackground: true
+            })
 
-        const key = `${nanoid()}.pdf`
+            const key = `${nanoid()}.pdf`
 
-        await s3.putObject({
-            Bucket: 'reports',
-            Key: key,
-            Body: pdf,
-            ContentType: 'application/pdf'
-        })
+            await s3.putObject({
+                Bucket: 'reports',
+                Key: key,
+                Body: pdf,
+                ContentType: 'application/pdf'
+            })
 
-        const url = await minioClient.presignedGetObject('reports', key)
+            const url = await minioClient.presignedGetObject('reports', key)
 
-        await prismaClient.report.update({
-            where: {
-                id: reportId
-            },
-            data: {
-                url
-            }
-        })
-    } catch (e) {
-        error = true
-        console.log('job failed')
-    } finally {
-        if (browser) browser.close()
+            await prismaClient.report.update({
+                where: {
+                    id: reportId
+                },
+                data: {
+                    url
+                }
+            })
+        } catch (e) {
+            error = true
+            console.log('job failed')
+        } finally {
+            if (browser) browser.close()
+        }
+
+        // make the job fail
+        if (error) throw new Error()
+    },
+    {
+        connection
     }
-
-    // make the job fail
-    if (error) throw new Error()
-})
+)
 
 export default reports
