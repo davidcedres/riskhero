@@ -1,5 +1,5 @@
 import { router } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { useStore } from '../state/store'
@@ -51,7 +51,11 @@ const Signin = () => {
     return (
         <View style={styles.root}>
             <VStack>
-                <Typography variant="title">Risk Ninja</Typography>
+                <Image
+                    source={require('../assets/ssst.png')}
+                    style={styles.logo}
+                />
+                <Typography variant="title">SSST ULA</Typography>
                 <Input
                     spellCheck={false}
                     autoCapitalize="none"
@@ -83,6 +87,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 1,
         padding: 32
+    },
+    logo: {
+        height: 96,
+        width: 96
     }
 })
 

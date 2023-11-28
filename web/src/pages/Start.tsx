@@ -3,6 +3,8 @@ import {
     Button,
     Container,
     Flex,
+    Group,
+    Image,
     Stack,
     Text,
     TextInput,
@@ -19,6 +21,7 @@ import { useLocalStorage } from '@mantine/hooks'
 import { User } from '../api/interfaces'
 import { useEffect, useMemo } from 'react'
 import toast from 'react-hot-toast'
+import ssstLogo from '../assets/ssst.png'
 
 type Form = {
     email?: string
@@ -115,24 +118,23 @@ const Start = () => {
         <Container>
             <Stack pb={256} gap={128}>
                 <Flex py="lg" align="center" justify="space-between">
-                    <Anchor
-                        component={Link}
-                        to="/"
-                        style={{ textDecoration: 'none' }}
-                    >
-                        <Text ff="Oswald Variable" fz={32} c="dark">
-                            RISKNINJA
-                        </Text>
+                    <Anchor to="/" component={Link} td="none">
+                        <Group>
+                            <Image src={ssstLogo} h={50} />
+
+                            <Text ff="Oswald Variable" fz={32} c="dark">
+                                SSST ULA
+                            </Text>
+                        </Group>
                     </Anchor>
                 </Flex>
 
                 <form>
                     <Stack
                         style={{
-                            borderColor: colors['slate']['100'],
+                            borderColor: colors['slate']['200'],
                             borderWidth: 2,
-                            borderStyle: 'solid',
-                            boxShadow: '0px 8px 24px ' + colors['slate']['100']
+                            borderStyle: 'solid'
                         }}
                         gap="xl"
                         p="xl"
@@ -141,16 +143,11 @@ const Start = () => {
                         <Title order={3}>{title}</Title>
 
                         {isOnboarding === false && (
-                            <TextInput
-                                label="Usuario"
-                                placeholder="david@riskninja.io"
-                                {...register('email')}
-                            />
+                            <TextInput label="Usuario" {...register('email')} />
                         )}
 
                         <TextInput
                             label="Contraseña"
-                            placeholder="123456*"
                             type="password"
                             {...register('password')}
                         />

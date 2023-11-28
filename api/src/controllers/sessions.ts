@@ -19,11 +19,13 @@ sessions.post(
     //     })
     // }),
     async (req, res) => {
-        const user = await prismaClient.user.findFirstOrThrow({
+        const user = await prismaClient.user.findFirst({
             where: {
                 email: req.body.email
             }
         })
+
+        if (user === null) return res.status(401).send()
 
         if (!bcrypt.compareSync(req.body.password, user.password))
             return res.status(401).json(makeError('Password', 'Incorrect'))

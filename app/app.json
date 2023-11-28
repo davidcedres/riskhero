@@ -1,8 +1,8 @@
 {
     "expo": {
         "scheme": "my-scheme",
-        "name": "Riskninja",
-        "slug": "riskninja",
+        "name": "SSST ULA",
+        "slug": "ssst-ula",
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
@@ -25,7 +25,7 @@
                 "android.permission.CAMERA",
                 "android.permission.RECORD_AUDIO"
             ],
-            "package": "io.riskninja"
+            "package": "io.ssst"
         },
         "web": {
             "favicon": "./assets/favicon.png"
@@ -47,6 +47,6 @@
                 "projectId": "54d978e7-e715-4f59-b6e1-64be54d4685d"
             }
         },
-        "owner": "riskninja"
+        "owner": "ssst-ula"
     }
 }
