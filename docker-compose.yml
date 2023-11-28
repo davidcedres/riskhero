@@ -1,0 +1,11 @@
+services:
+    api:
+        build: api
+        ports:
+            - '3030:3030'
+    # web:
+    #     build: .
+    #     ports:
+    #         - '8000:5000'
+    redis:
+        image: 'redis:alpine'

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { hashSync } from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import express from 'express'
 import { Request } from 'express-jwt'
 import jwt from 'jsonwebtoken'
@@ -103,7 +103,10 @@ users.patch(
                 id: session.id
             },
             data: {
-                password: hashSync(req.body.password, Number(process.env.SALT!))
+                password: bcrypt.hashSync(
+                    req.body.password,
+                    Number(process.env.SALT!)
+                )
             }
         })
 

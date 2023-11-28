@@ -1,0 +1,24 @@
+FROM node:18
+
+WORKDIR /app
+
+ENV PORT=3030
+ENV SALT=10
+ENV DATABASE_URL=postgres://postgres:G3a6FCaaGeCeDfgfEaGbfd344Fe4a6Cb@viaduct.proxy.rlwy.net:56675/railway
+ENV SECRET=83n8weaTNntccE27NNOGYga42RAykgh3ebzsgiPlXUNuKclgmUxSvfChJ5Tbmvt9
+ENV MINIO_ACCESS_KEY_ID=Mpn1bxm0WqBAW4adV8ll
+ENV MINIO_SECRET_ACCESS_KEY=V8gSDgfW4NgdXWtumpnpLHSvUF4CDY9n3FDmcRr0
+ENV RESEND_SECRET_KEY=re_bjeLTgdF_3485mCVfXFLfhDfm4LJwSoys
+ENV REDISHOST=redis
+ENV REDISPORT=6379
+ENV REDISUSER=
+ENV REDISPASSWORD=
+
+COPY package*.json ./
+
+RUN npm ci
+COPY . .
+
+EXPOSE 3030
+
+CMD ["npm", "run", "dev"]

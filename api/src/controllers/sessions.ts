@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { compareSync } from 'bcrypt'
+import bcrypt from 'bcryptjs'
 // import { validateRequest } from 'zod-express-middleware'
 import express from 'express'
 import jwt from 'jsonwebtoken'
@@ -25,7 +25,7 @@ sessions.post(
             }
         })
 
-        if (!compareSync(req.body.password, user.password))
+        if (!bcrypt.compareSync(req.body.password, user.password))
             return res.status(401).json(makeError('Password', 'Incorrect'))
 
         res.json({

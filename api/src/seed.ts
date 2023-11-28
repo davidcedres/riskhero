@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { hashSync } from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -11,7 +11,7 @@ await prisma.user.create({
         email: 'admin@riskninja.io',
         name: 'David Cedres',
         role: 'ADMIN',
-        password: hashSync('Password.123', Number(process.env.SALT!)),
+        password: bcrypt.hashSync('Password.123', Number(process.env.SALT!)),
         updatedAt: new Date()
     }
 })
