@@ -1,52 +1,54 @@
 {
-    "expo": {
-        "scheme": "my-scheme",
-        "name": "SSST ULA",
-        "slug": "ssst-ula",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/icon.png",
-        "userInterfaceStyle": "light",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
-            },
-            "permissions": [
-                "android.permission.CAMERA",
-                "android.permission.RECORD_AUDIO"
-            ],
-            "package": "io.ssst"
-        },
-        "web": {
-            "favicon": "./assets/favicon.png"
-        },
-        "plugins": [
-            "expo-router",
-            [
-                "expo-camera",
-                {
-                    "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
-                }
-            ]
-        ],
-        "extra": {
-            "router": {
-                "origin": false
-            },
-            "eas": {
-                "projectId": "54d978e7-e715-4f59-b6e1-64be54d4685d"
-            }
-        },
-        "owner": "ssst-ula"
-    }
+  "expo": {
+    "scheme": "my-scheme",
+    "name": "SSST ULA",
+    "slug": "ssst-ula",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "io.ssst"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "eaeb55bb-acb5-4fc5-b20d-ae08eec980bd"
+      }
+    },
+    "owner": "ssst-ula"
+  }
 }
