@@ -4,7 +4,7 @@ import { keyBy, merge } from 'lodash'
 import { nanoid } from 'nanoid'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { Category, Evidence, Inspection, Observation } from './interfaces'
 
 /*
@@ -188,7 +188,7 @@ export const useStore = create(
         })),
         {
             name: 'storage',
-            getStorage: () => AsyncStorage
+            storage: createJSONStorage(() => AsyncStorage)
         }
     )
 )

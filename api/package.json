@@ -5,10 +5,10 @@
     "description": "",
     "main": "src/api.ts",
     "scripts": {
-        "start": "node --loader ts-node/esm src/api.ts",
-        "dev": "node --watch --loader ts-node/esm src/api.ts",
+        "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/api.ts",
+        "dev": "node --no-warnings=ExperimentalWarning --watch --loader ts-node/esm src/api.ts",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "seed": "ts-node src/seed.ts",
+        "seed": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/seed.ts",
         "lint": "eslint . --ext .ts --max-warnings 0 --fix"
     },
     "keywords": [],

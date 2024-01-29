@@ -32,7 +32,7 @@ await prisma.user.create({
         name: 'David Cedres',
         role: 'MANAGER',
         organizationId: organization.id,
-        password: hashSync('Password.1', Number(process.env.SALT!)),
+        password: bcrypt.hashSync('Password.1', Number(process.env.SALT!)),
         updatedAt: new Date()
     }
 })

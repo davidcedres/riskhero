@@ -116,7 +116,7 @@ const Start = () => {
 
     return (
         <Container>
-            <Stack pb={256} gap={128}>
+            <Stack pb={256} gap="xl">
                 <Flex py="lg" align="center" justify="space-between">
                     <Anchor to="/" component={Link} td="none">
                         <Group>
@@ -128,6 +128,8 @@ const Start = () => {
                         </Group>
                     </Anchor>
                 </Flex>
+
+                <Title mt="lg">Bienvenido</Title>
 
                 <form>
                     <Stack
@@ -143,7 +145,7 @@ const Start = () => {
                         <Title order={3}>{title}</Title>
 
                         {isOnboarding === false && (
-                            <TextInput label="Usuario" {...register('email')} />
+                            <TextInput label="Correo" {...register('email')} />
                         )}
 
                         <TextInput

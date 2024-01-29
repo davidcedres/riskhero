@@ -1,3 +1,3 @@
 export const palette = {
-    main: '#845ef7'
+    main: '#1e293b'
 }
