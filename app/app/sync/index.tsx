@@ -12,7 +12,7 @@ const Sync = () => {
 
     useFocusEffect(useCallback(() => void sync(), []))
 
-    const navigateAway = () => router.replace('/inspections')
+    const navigateAway = router.back
 
     const title = state.loading
         ? 'Sincronizando con el servidor'

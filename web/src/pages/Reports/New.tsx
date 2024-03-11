@@ -241,7 +241,7 @@ const NewReport = () => {
                                         </Text>
 
                                         <Image
-                                            src={observation.evidences[0].url}
+                                            src={observation.evidences[0]?.url}
                                             maw={128}
                                             mah={128}
                                             style={{

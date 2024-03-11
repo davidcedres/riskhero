@@ -13,7 +13,14 @@
             },
             "distribution": "internal"
         },
-        "production": {}
+        "production": {
+            "env": {
+                "EXPO_PUBLIC_API_URL": "https://api.ssst.io"
+            },
+            "android": {
+                "buildType": "apk"
+            }
+        }
     },
     "submit": {
         "production": {}
