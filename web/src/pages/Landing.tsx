@@ -17,7 +17,7 @@ import ssstLogo from '../assets/ssst.png'
 const Landing = () => {
     return (
         <Container>
-            <Stack pb={256} gap={256}>
+            <Stack pb={256} gap={128}>
                 <Flex py="lg" align="center" justify="space-between">
                     <Anchor to="/" component={Link} td="none">
                         <Group>
