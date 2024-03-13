@@ -111,7 +111,7 @@ const Layout: FC<{ role: User['role'] }> = ({ role }) => {
             </AppShell.Navbar>
 
             <AppShell.Main>
-                <Container fluid={false} pb="lg">
+                <Container fluid={true} pb="lg">
                     <Outlet />
                 </Container>
             </AppShell.Main>

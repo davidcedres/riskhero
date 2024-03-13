@@ -136,31 +136,35 @@ reports.post(
 new Worker(
     'reports',
     async (job) => {
-        console.log('job to be executed ', job.name)
+        console.log('executing job', job.name, job.data)
 
         const reportId = job.data.reportId
 
         let browser: Browser | null = null
-        let error = false
+        let error: unknown | null = null
 
         try {
             browser = await puppeteer.connect({
                 browserWSEndpoint:
-                    'wss://chrome.browserless.io?token=65d1263e-b3e4-4864-a7a6-f9f9ec247d55'
+                    'wss://chrome.browserless.io?token=' +
+                    process.env.BROWSERLESS_TOKEN
             })
 
             const page = await browser.newPage()
 
-            await page.goto('https://riskninja.io/start', {
+            await page.goto('https://ssst.io/start', {
                 waitUntil: 'networkidle0'
             })
 
-            await page.type('input[name="email"]', 'admin@riskninja.io')
-            await page.type('input[name="password"]', 'Password.123')
+            await page.type('input[name="email"]', process.env.ADMIN_USER!)
+            await page.type(
+                'input[name="password"]',
+                process.env.ADMIN_PASSWORD!
+            )
             await page.click('button[type="submit"]')
             await page.waitForNetworkIdle()
 
-            await page.goto('https://riskninja.io/reports/' + reportId, {
+            await page.goto('https://ssst.io/reports/' + reportId, {
                 waitUntil: 'networkidle0'
             })
 
@@ -194,14 +198,14 @@ new Worker(
                 }
             })
         } catch (e) {
-            error = true
-            console.log('job failed')
+            error = e
+            console.log(e)
         } finally {
             if (browser) browser.close()
         }
 
         // make the job fail
-        if (error) throw new Error()
+        if (error !== null) throw new Error()
     },
     {
         connection

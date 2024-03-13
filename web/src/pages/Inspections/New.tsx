@@ -39,12 +39,16 @@ const NewInspection = () => {
     const navigate = useNavigate()
 
     const { handleSubmit, control } = useForm<Form>({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
+        defaultValues: {
+            type: 'ANNOUNCED'
+        }
     })
 
     const areasRequest = useQuery(['FetchAreas'], () =>
         api.get<Area[]>('/areas')
     )
+
     const usersRequest = useQuery(['FetchUsers'], () =>
         api.get<User[]>('/users', {
             params: {
@@ -52,6 +56,7 @@ const NewInspection = () => {
             }
         })
     )
+
     const saveRequest = useMutation(
         (data: Omit<Inspection, 'id' | 'observations'>) =>
             api.post('/inspections', data)

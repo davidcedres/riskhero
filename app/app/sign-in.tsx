@@ -33,12 +33,14 @@ const Signin = () => {
         try {
             setLoading(true)
 
-            const response = await api.post<{ jwt: string; user: User }>(
-                '/sessions',
-                payload
-            )
+            const response = await api.post<{
+                jwt: string
+                user: User
+                client: 'app'
+            }>('/sessions', payload)
+
             login(response.data.jwt)
-            router.replace('/sync')
+            router.replace('/inspections')
         } catch (error) {
             setLoading(false)
         }
@@ -64,6 +66,7 @@ const Signin = () => {
                     name="email"
                     control={control}
                 />
+
                 <Input
                     secureTextEntry={true}
                     passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
@@ -71,6 +74,7 @@ const Signin = () => {
                     name="password"
                     control={control}
                 />
+
                 <Button
                     loading={loading}
                     onPress={handleSubmit(handleLogin, handleError)}
