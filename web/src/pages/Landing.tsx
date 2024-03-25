@@ -1,51 +1,25 @@
-import { Player } from '@lottiefiles/react-lottie-player'
-import {
-    Anchor,
-    Button,
-    Container,
-    Flex,
-    Group,
-    Image,
-    Stack,
-    Text,
-    Title
-} from '@mantine/core'
+import { Button, Stack, Text, Title } from '@mantine/core'
 import { Link } from 'react-router-dom'
-import construction from '../lotties/construction.json'
-import ssstLogo from '../assets/ssst.png'
 
 const Landing = () => {
     return (
-        <Container>
-            <Stack pb={256} gap={128}>
-                <Flex py="lg" align="center" justify="space-between">
-                    <Anchor to="/" component={Link} td="none">
-                        <Group>
-                            <Image src={ssstLogo} h={50} />
+        <Stack maw={450} gap={48} align="flex-start">
+            <Stack align="center" gap="lg">
+                <Title order={1}>
+                    Lleva la seguridad de tu organización al siguiente nivel
+                </Title>
 
-                            <Text ff="Oswald Variable" fz={32} c="dark">
-                                SSST ULA
-                            </Text>
-                        </Group>
-                    </Anchor>
-
-                    <Button component={Link} to="/start" variant="light">
-                        Iniciar sesión
-                    </Button>
-                </Flex>
-
-                <Stack align="center" gap="lg">
-                    <Title fz={48}>Servicio de Seguridad y Salud ULA</Title>
-
-                    <Player
-                        autoplay
-                        loop
-                        src={construction}
-                        style={{ height: '300px', width: '100%' }}
-                    />
-                </Stack>
+                <Text>
+                    Planifica, ejecuta y mide la efectividad de tus
+                    inspecciones, auditorias y evaluaciones de riesgo, velando
+                    por la salud de los trabajadores.
+                </Text>
             </Stack>
-        </Container>
+
+            <Button component={Link} to="/start">
+                Empezar
+            </Button>
+        </Stack>
     )
 }
 

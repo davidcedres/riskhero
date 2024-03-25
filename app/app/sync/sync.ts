@@ -5,6 +5,10 @@ import { useStore } from '../../state/store'
 import api from '../../api/api'
 import * as FileSystem from 'expo-file-system'
 
+const baseURL = process.env.EXPO_PUBLIC_API_URL!
+
+if (baseURL === undefined) throw new Error('EXPO_PUBLIC_API not defined')
+
 /*
 Data synchronization:
 
@@ -96,7 +100,7 @@ const push = async () => {
                 throw new Error('App has no access to document directory')
 
             await FileSystem.uploadAsync(
-                'http://localhost:3030/evidences',
+                baseURL + '/evidences',
                 FileSystem.documentDirectory + 'evidences/' + evidence.filename,
                 {
                     fieldName: 'file',

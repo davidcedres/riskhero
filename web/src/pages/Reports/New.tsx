@@ -17,6 +17,7 @@ import {
     Anchor,
     Badge,
     Button,
+    Group,
     Image,
     Modal,
     Stack,
@@ -42,9 +43,6 @@ type Form = {
     conclusion: string
 }
 
-const randomImage =
-    'https://images.unsplash.com/photo-1481349518771-20055b2a7b24?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww'
-
 const NewReport = () => {
     // HOOKS
     const queryClient = useQueryClient()
@@ -62,7 +60,7 @@ const NewReport = () => {
     // STATE
     const [saving, setSaving] = useState(false)
     const [confirmation, setConfirmation] = useState(false)
-    const [evidence, setEvidence] = useState(false)
+    const [evidence, setEvidence] = useState<Evidence | undefined>(undefined)
     const [payloadBuffer, setPayloadBuffer] = useState<Form>()
 
     // QUERIES
@@ -159,7 +157,9 @@ const NewReport = () => {
                         ← Informes
                     </Anchor>
 
-                    <Title my="md">Nuevo Informe</Title>
+                    <Title my="md" order={1}>
+                        Nuevo Informe
+                    </Title>
 
                     <Text>
                         Correspondiente a la inspección de{' '}
@@ -204,7 +204,7 @@ const NewReport = () => {
                             p="md"
                             style={{ borderRadius: 8 }}
                         >
-                            <Title size="h2">{category.name}</Title>
+                            <Title order={2}>{category.name}</Title>
 
                             {badObservations.map((observation) => {
                                 const index = fields.findIndex(
@@ -216,7 +216,7 @@ const NewReport = () => {
 
                                 return (
                                     <Stack>
-                                        <Title size="h3">
+                                        <Title order={3}>
                                             {observation.condition.name}
                                         </Title>
 
@@ -240,16 +240,26 @@ const NewReport = () => {
                                             {observation.description}
                                         </Text>
 
-                                        <Image
-                                            src={observation.evidences[0]?.url}
-                                            maw={128}
-                                            mah={128}
-                                            style={{
-                                                cursor: 'pointer',
-                                                borderRadius: 4
-                                            }}
-                                            onClick={() => setEvidence(true)}
-                                        />
+                                        <Group>
+                                            {observation.evidences.map(
+                                                (evidence) => (
+                                                    <Image
+                                                        src={evidence.url}
+                                                        maw={128}
+                                                        mah={128}
+                                                        style={{
+                                                            cursor: 'pointer',
+                                                            borderRadius: 4
+                                                        }}
+                                                        onClick={() =>
+                                                            setEvidence(
+                                                                evidence
+                                                            )
+                                                        }
+                                                    />
+                                                )
+                                            )}
+                                        </Group>
 
                                         <Textarea
                                             label="Analisis"
@@ -296,8 +306,8 @@ const NewReport = () => {
                 </Button>
 
                 <Modal
-                    opened={evidence}
-                    onClose={() => setEvidence(false)}
+                    opened={evidence !== undefined}
+                    onClose={() => setEvidence(undefined)}
                     withCloseButton={false}
                     centered
                     overlayProps={{
@@ -305,7 +315,7 @@ const NewReport = () => {
                         blur: 3
                     }}
                 >
-                    <Image src={randomImage} maw={512} mah={512} />
+                    <Image src={evidence?.url} maw={512} mah={512} />
                 </Modal>
 
                 <Modal

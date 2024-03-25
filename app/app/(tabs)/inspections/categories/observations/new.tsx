@@ -251,6 +251,7 @@ const Observation = () => {
                                 value={description}
                                 onChangeText={setDescription}
                                 style={styles.textarea}
+                                textAlignVertical="top"
                             />
 
                             <Button onPress={saveCaption}>Guardar</Button>
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
         gap: 32
     },
     camera: {
-        height: 320,
+        height: 450,
         width: '100%'
     },
     preview: {

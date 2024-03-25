@@ -38,7 +38,7 @@ const Reports = () => {
 
     return (
         <Stack>
-            <Title>Informes</Title>
+            <Title order={1}>Informes</Title>
 
             {reports.length > 0 && (
                 <Table verticalSpacing="lg">

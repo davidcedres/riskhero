@@ -3,6 +3,8 @@ import { Tabs } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
 
 export default () => {
+    // TODO: confirm that the user is logged in
+
     return (
         <Tabs
             screenOptions={{

@@ -24,7 +24,7 @@ const Users = () => {
     return (
         <Stack>
             <Flex justify="space-between" mb="lg">
-                <Title>Usuarios</Title>
+                <Title order={1}>Usuarios</Title>
 
                 <Button component={Link} to="new">
                     Nuevo

@@ -39,13 +39,12 @@ const Inspection = () => {
         () =>
             every(categories.ids, (categoryId) => {
                 const stats = statsPerCategory[categoryId]
-                return stats.observations === stats.conditions
+                return stats.observations > stats.conditions
             }),
         [statsPerCategory]
     )
 
-    const inspectionCanBeClosed =
-        inspection.status === 'OPEN' && allCategoriesHaveFullData
+    const inspectionCanBeClosed = inspection.status === 'OPEN'
 
     // CALLBACKS
     const handleClose = () => {
@@ -57,10 +56,14 @@ const Inspection = () => {
         <ScrollView style={{ backgroundColor: 'white' }}>
             <VStack style={{ padding: 16 }}>
                 <VStack style={{ marginBottom: 16 }}>
+                    <Link href="/inspections">Regresar</Link>
+
                     <Typography variant="title">Inspección</Typography>
+
                     <Typography variant="body">
                         {inspection.area.name}
                     </Typography>
+
                     <Typography variant="body">
                         {inspection.inspector.name}
                     </Typography>

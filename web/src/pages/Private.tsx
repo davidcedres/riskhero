@@ -13,8 +13,6 @@ import {
     Burger,
     Container,
     Flex,
-    Group,
-    Image,
     NavLink,
     Text
 } from '@mantine/core'
@@ -32,7 +30,6 @@ import NewUser from './Users/New'
 import { FC, useContext } from 'react'
 import { SessionContext } from '../utils/useSession'
 import { User } from '../api/interfaces'
-import ssstLogo from '../assets/ssst.png'
 
 const Layout: FC<{ role: User['role'] }> = ({ role }) => {
     const [opened, { toggle }] = useDisclosure()
@@ -54,13 +51,11 @@ const Layout: FC<{ role: User['role'] }> = ({ role }) => {
 
                 <Flex align="center" justify="space-between">
                     <Anchor to="/inspections" component={Link} td="none">
-                        <Group>
-                            <Image src={ssstLogo} h={50} />
-
-                            <Text ff="Oswald Variable" fz={32} c="dark">
-                                SSST ULA
+                        <Anchor to="/" component={Link} td="none">
+                            <Text fw="bold" c="dark">
+                                Safety At Work
                             </Text>
-                        </Group>
+                        </Anchor>
                     </Anchor>
 
                     <UserButton />

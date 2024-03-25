@@ -63,6 +63,8 @@ const Category = () => {
     return (
         <ScrollView style={{ backgroundColor: 'white' }}>
             <VStack style={{ padding: 16 }}>
+                <Link href={'/inspections/' + inspectionId}>Regresar</Link>
+
                 <Typography variant="title">{category.name}</Typography>
 
                 <Typography variant="section">Condiciones</Typography>

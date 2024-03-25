@@ -1,17 +1,6 @@
-import {
-    Anchor,
-    Button,
-    Container,
-    Flex,
-    Group,
-    Image,
-    Stack,
-    Text,
-    TextInput,
-    Title
-} from '@mantine/core'
+import { Button, Stack, TextInput, Title } from '@mantine/core'
 import colors from '../colors'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from 'react-query'
 import api from '../api/api'
 import { useForm } from 'react-hook-form'
@@ -21,7 +10,6 @@ import { useLocalStorage } from '@mantine/hooks'
 import { User } from '../api/interfaces'
 import { useEffect, useMemo } from 'react'
 import toast from 'react-hot-toast'
-import ssstLogo from '../assets/ssst.png'
 
 type Form = {
     email?: string
@@ -115,61 +103,44 @@ const Start = () => {
     }
 
     return (
-        <Container>
-            <Stack pb={256} gap="xl">
-                <Flex py="lg" align="center" justify="space-between">
-                    <Anchor to="/" component={Link} td="none">
-                        <Group>
-                            <Image src={ssstLogo} h={50} />
+        <Stack gap="xl">
+            <Title order={1}>Bienvenido</Title>
 
-                            <Text ff="Oswald Variable" fz={32} c="dark">
-                                SSST ULA
-                            </Text>
-                        </Group>
-                    </Anchor>
-                </Flex>
+            <form>
+                <Stack
+                    p="lg"
+                    style={{
+                        borderColor: colors['slate']['200'],
+                        borderWidth: 2,
+                        borderStyle: 'solid'
+                    }}
+                    w="300"
+                >
+                    <Title order={3}>{title}</Title>
 
-                <Title mt="lg">Bienvenido</Title>
+                    {isOnboarding === false && (
+                        <TextInput label="Correo" {...register('email')} />
+                    )}
 
-                <form>
-                    <Stack
-                        style={{
-                            borderColor: colors['slate']['200'],
-                            borderWidth: 2,
-                            borderStyle: 'solid'
-                        }}
-                        gap="xl"
-                        p="xl"
-                        maw={512}
+                    <TextInput
+                        label="Contraseña"
+                        type="password"
+                        {...register('password')}
+                    />
+
+                    <Button
+                        onClick={handleSubmit(onSubmit)}
+                        loading={
+                            loginRequest.isLoading ||
+                            setPasswordRequest.isLoading
+                        }
+                        type="submit"
                     >
-                        <Title order={3}>{title}</Title>
-
-                        {isOnboarding === false && (
-                            <TextInput label="Correo" {...register('email')} />
-                        )}
-
-                        <TextInput
-                            label="Contraseña"
-                            type="password"
-                            {...register('password')}
-                        />
-
-                        {loginRequest.isLoading}
-
-                        <Button
-                            onClick={handleSubmit(onSubmit)}
-                            loading={
-                                loginRequest.isLoading ||
-                                setPasswordRequest.isLoading
-                            }
-                            type="submit"
-                        >
-                            Entrar
-                        </Button>
-                    </Stack>
-                </form>
-            </Stack>
-        </Container>
+                        Entrar
+                    </Button>
+                </Stack>
+            </form>
+        </Stack>
     )
 }
 

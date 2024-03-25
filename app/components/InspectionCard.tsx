@@ -16,10 +16,12 @@ const InspectionCard: FC<{ inspection: Inspection; area: Area }> = ({
 
             <VStack>
                 <Typography variant="body">
-                    {format(new Date(inspection.date), 'MMMM dd')}
+                    {format(new Date(inspection.date), 'PP')}
                 </Typography>
 
-                <Typography variant="body">2:00pm</Typography>
+                <Typography variant="body">
+                    {format(new Date(inspection.date), 'p')}
+                </Typography>
             </VStack>
 
             <Badge

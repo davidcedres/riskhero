@@ -1,5 +1,10 @@
-generator client {
-    provider = "prisma-client-js"
+// generator client {
+//     provider = "prisma-client-js"
+// }
+
+generator erd {
+    provider = "prisma-erd-generator"
+    theme    = "forest"
 }
 
 datasource db {

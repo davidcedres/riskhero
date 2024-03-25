@@ -122,7 +122,7 @@ const Inspections = () => {
     return (
         <Stack>
             <Flex justify="space-between">
-                <Title>Inspecciones</Title>
+                <Title order={1}>Inspecciones</Title>
 
                 {session.role === 'MANAGER' && (
                     <Button component={Link} to="new">

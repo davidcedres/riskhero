@@ -1,7 +1,9 @@
-import '@fontsource/roboto-condensed/700.css'
-import '@fontsource/roboto/400.css'
-import '@fontsource/roboto/700.css'
-import '@fontsource-variable/oswald'
+import '@fontsource/lato/100.css'
+import '@fontsource/lato/300.css'
+import '@fontsource/lato/400.css'
+import '@fontsource/lato/700.css'
+import '@fontsource/lato/900.css'
+import '@fontsource-variable/space-grotesk'
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -25,11 +27,11 @@ const queryClient = new QueryClient({
 })
 
 const myTheme = createTheme({
-    primaryColor: 'dark',
+    primaryColor: 'indigo',
     defaultRadius: 4,
-    fontFamily: 'Roboto, sans-serif',
+    fontFamily: 'Lato, sans-serif',
     fontFamilyMonospace: 'Monaco, Courier, monospace',
-    headings: { fontFamily: 'Roboto Condensed, sans-serif' }
+    headings: { fontFamily: 'Space Grotesk Variable, sans-serif' }
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
