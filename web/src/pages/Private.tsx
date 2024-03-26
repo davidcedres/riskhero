@@ -53,7 +53,7 @@ const Layout: FC<{ role: User['role'] }> = ({ role }) => {
                     <Anchor to="/inspections" component={Link} td="none">
                         <Anchor to="/" component={Link} td="none">
                             <Text fw="bold" c="dark">
-                                Safety At Work
+                                Riskninja
                             </Text>
                         </Anchor>
                     </Anchor>

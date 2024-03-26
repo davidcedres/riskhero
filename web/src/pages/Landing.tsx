@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const Landing = () => {
     return (
         <Stack maw={450} gap={48} align="flex-start">
-            <Stack align="center" gap="lg">
+            <Stack align="flex-start" gap="lg">
                 <Title order={1}>
                     Lleva la seguridad de tu organización al siguiente nivel
                 </Title>
@@ -14,11 +14,11 @@ const Landing = () => {
                     inspecciones, auditorias y evaluaciones de riesgo, velando
                     por la salud de los trabajadores.
                 </Text>
-            </Stack>
 
-            <Button component={Link} to="/start">
-                Empezar
-            </Button>
+                <Button component={Link} to="/start">
+                    Empezar
+                </Button>
+            </Stack>
         </Stack>
     )
 }

@@ -1,33 +1,44 @@
-import { Flex, Image, Stack, Anchor, Text, Group } from '@mantine/core'
-import { Outlet, Link } from 'react-router-dom'
+import { Flex, Image, Stack, Anchor, Text, Group, Button } from '@mantine/core'
+import { Outlet, Link, NavLink } from 'react-router-dom'
 
 import banner from '../assets/jeriden-villegas-niSnhfMjiMI-unsplash.jpg'
 
 const PublicLayout = () => {
     return (
         <Flex>
-            <Flex w="100%" justify="center" p="lg">
-                <Stack w={450} gap={48} align="center">
+            <Flex w="100%" justify="center" p="xl">
+                <Stack w="100%" gap={48} align="center">
                     {/* Navbar */}
                     <Flex w="100%" align="center" justify="space-between">
                         <Anchor to="/" component={Link} td="none">
                             <Text fw="bold" c="dark">
-                                Safety At Work
+                                Riskninja
                             </Text>
                         </Anchor>
 
                         <Group>
-                            <Anchor to="/" component={Link} td="none">
-                                <Text fz="sm">¿Qué es?</Text>
-                            </Anchor>
+                            {[
+                                ['/', '¿Qué es?'],
+                                ['/pricing', 'Precio']
+                            ].map(([path, text]) => (
+                                <NavLink
+                                    to={path}
+                                    style={{ textDecoration: 'none' }}
+                                >
+                                    {({ isActive }) => (
+                                        <Text
+                                            fz="sm"
+                                            c={isActive ? 'orange' : 'dark'}
+                                        >
+                                            {text}
+                                        </Text>
+                                    )}
+                                </NavLink>
+                            ))}
 
-                            <Anchor to="/" component={Link} td="none">
-                                <Text fz="sm">Precio</Text>
-                            </Anchor>
-
-                            <Anchor to="/" component={Link} td="none">
-                                <Text fz="sm">Producto</Text>
-                            </Anchor>
+                            <Button component={Link} to="/contact" size="xs">
+                                Contacto
+                            </Button>
                         </Group>
                     </Flex>
 
