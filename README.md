@@ -1,6 +1,6 @@
-# Safety At Work
+# Riskhero
 
-This is a complete solution for managing security inspections in an organization.
+Available at [riskhero.io](https://riskhero.io)
 
 ## How to run
 
